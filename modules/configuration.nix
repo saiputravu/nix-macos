@@ -5,13 +5,11 @@
   ...
 }: {
   imports = [
-    # ./touch-id.nix
   ];
 
   environment = {
     systemPackages = with pkgs; [
-      # 1Password has to be installed system-wide
-      # _1password
+      # System wide packages
     ];
   };
 
@@ -24,7 +22,7 @@
   };
 
   services = {
-    # nix-daemon.enable = true;
+    # Todo, aerospace managed through nix
     # aerospace = {
     #   enable = true;
     # };
@@ -112,36 +110,5 @@
       LaunchServices.LSQuarantine = true;
       spaces.spans-displays = false;
     };
-
-    keyboard = {
-      # enableKeyMapping = true;
-      # remapCapsLockToEscape = true;
-      # swapLeftCommandAndLeftAlt = true;
-    };
-
-    # build.applications = pkgs.lib.mkForce (pkgs.buildEnv {
-    #   name = "applications";
-    #   # link home-manager apps into /Applications instead of ~/Applications
-    #   # fix from https://github.com/LnL7/nix-darwin/issues/139#issuecomment-663117229
-    #   paths = config.environment.systemPackages ++ config.home-manager.users.${config.user}.home.packages;
-    #   pathsToLink = "/Applications";
-    # });
-
-    # https://github.com/zhaofengli/nix-homebrew/issues/3#issuecomment-1622240992
-    # activationScripts = {
-    #   extraUserActivation.text = lib.mkOrder 1501 (lib.concatStringsSep "\n" (lib.mapAttrsToList (prefix: d:
-    #     if d.enable
-    #     then ''
-    #       sudo chown -R ${config.nix-homebrew.user} ${prefix}/bin
-    #       sudo chgrp -R ${config.nix-homebrew.group} ${prefix}/bin
-    #     ''
-    #     else "")
-    #   config.nix-homebrew.prefixes));
-    #   postActivation.text = ''
-    #     ${pkgs.skhd}/bin/skhd -r
-    #   '';
-    # };
   };
-
-  # security.pam.enableSudoTouchId = true;
 }
