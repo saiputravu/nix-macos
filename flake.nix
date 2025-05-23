@@ -14,28 +14,10 @@
   };
 
   outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager }:
+  let username = "sai"; in
+  let homedir = "/Users/sai"; in
   let
     configuration = { pkgs, ... }: {
-      # List packages installed in system profile. To search by name, run:
-      # $ nix-env -qaP | grep wget
-      environment.systemPackages =
-        [ pkgs.vim
-          pkgs.wget
-          pkgs.tmux
-          pkgs.go
-          pkgs.tree-sitter
-          pkgs.nodejs_24
-          pkgs.opam
-          pkgs.aerospace
-          pkgs.zathura
-          pkgs.anki-bin
-          pkgs.discord
-          pkgs.ripgrep
-          pkgs.vscode
-          pkgs.ice-bar
-          pkgs.aerospace
-        ];
-
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
       nixpkgs.config.allowUnfree = true;
@@ -50,24 +32,17 @@
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
       
-    };
-    homeconfig = {pkgs, ...}: {
-      # Internal compatibility configuration for home-manager, do not change this.
-      home.stateVersion = "23.05";
-
-      # Letting home-manager install and manage itself
-      programs.home-manager.enable = true;
-      home.packages = with pkgs; [];
-
-      home.sessionVariables = {
-        EDITOR = "nvim";
+      users.users.sai = {
+        name = username;
+        home = homedir;
       };
     };
   in
   {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#simple
-    darwinConfigurations."sai" = nix-darwin.lib.darwinSystem {
+    darwinConfigurations."${username}" = nix-darwin.lib.darwinSystem {
+      specialArgs = { inherit username homedir inputs; };
       modules = [
           configuration
           ./modules/configuration.nix

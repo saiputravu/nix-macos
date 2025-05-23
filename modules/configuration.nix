@@ -10,6 +10,18 @@
   environment = {
     systemPackages = with pkgs; [
       # System wide packages
+      # $ nix-env -qaP | grep wget
+      wget
+      vim
+      neovim
+      tmux
+      go
+      tree-sitter
+      nodejs_24
+      opam
+      aerospace
+      ripgrep
+      ice-bar
     ];
   };
 
