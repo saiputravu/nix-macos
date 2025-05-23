@@ -40,6 +40,7 @@ let saiHomeConfig = {
       vscode
       zathura
       spotify
+      spicetify-cli
     ];
 
     sessionVariables = {
@@ -67,12 +68,16 @@ let saiHomeConfig = {
     };
     spicetify = {
       enable = true;
-      theme = spicePkgs.themes.catppuccin;
-      colorScheme = "mocha";
+      theme = spicePkgs.themes.comfy;
+      colorScheme = "Velvet";
       enabledExtensions = with spicePkgs.extensions; [
         keyboardShortcut
         shuffle
       ];
+    };
+    tmux = {
+      enable = true;
+      extraConfig = builtins.readFile ../configs/tmux.conf;
     };
   };
 
