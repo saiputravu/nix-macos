@@ -41,6 +41,7 @@ let saiHomeConfig = {
       zathura
       spotify
       spicetify-cli
+      obsidian
     ];
 
     sessionVariables = {
