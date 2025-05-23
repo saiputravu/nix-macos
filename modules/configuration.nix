@@ -22,10 +22,10 @@
   };
 
   services = {
-    # Todo, aerospace managed through nix
-    # aerospace = {
-    #   enable = true;
-    # };
+    aerospace = {
+      enable = true;
+      settings = pkgs.lib.importTOML ../configs/aerospace.toml;
+    };
   };
 
   # Logging is disabled by default
@@ -61,8 +61,8 @@
 
     defaults = {
       NSGlobalDomain = {
-        KeyRepeat = 15;
-        InitialKeyRepeat = 1;
+        InitialKeyRepeat = 15;
+        KeyRepeat = 1;
 
         AppleFontSmoothing = 2;
         
@@ -75,7 +75,7 @@
         "com.apple.mouse.tapBehavior" = 1;
         "com.apple.trackpad.enableSecondaryClick" = false;
 
-        _HIHideMenuBar = true;
+        # _HIHideMenuBar = true;
       };
       controlcenter = {
           AirDrop = true;

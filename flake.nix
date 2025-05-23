@@ -26,6 +26,8 @@
           pkgs.discord
           pkgs.ripgrep
           pkgs.vscode
+          pkgs.ice-bar
+          pkgs.aerospace
         ];
 
       # Necessary for using flakes on this system.
