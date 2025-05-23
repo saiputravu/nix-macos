@@ -3,11 +3,17 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager }:
   let
     configuration = { pkgs, ... }: {
       # List packages installed in system profile. To search by name, run:
@@ -34,9 +40,6 @@
       nix.settings.experimental-features = "nix-command flakes";
       nixpkgs.config.allowUnfree = true;
 
-      # Enable alternative shell support in nix-darwin.
-      # programs.fish.enable = true;
-
       # Set Git commit hash for darwin-version.
       system.configurationRevision = self.rev or self.dirtyRev or null;
 
@@ -48,6 +51,18 @@
       nixpkgs.hostPlatform = "aarch64-darwin";
       
     };
+    homeconfig = {pkgs, ...}: {
+      # Internal compatibility configuration for home-manager, do not change this.
+      home.stateVersion = "23.05";
+
+      # Letting home-manager install and manage itself
+      programs.home-manager.enable = true;
+      home.packages = with pkgs; [];
+
+      home.sessionVariables = {
+        EDITOR = "nvim";
+      };
+    };
   in
   {
     # Build darwin flake using:
@@ -56,6 +71,7 @@
       modules = [
           configuration
           ./modules/configuration.nix
+          ./modules/home-manager.nix
         ];
     };
   };
