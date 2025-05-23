@@ -90,8 +90,6 @@
 
         "com.apple.mouse.tapBehavior" = 1;
         "com.apple.trackpad.enableSecondaryClick" = false;
-
-        # _HIHideMenuBar = true;
       };
       controlcenter = {
           AirDrop = true;
@@ -109,6 +107,11 @@
         minimize-to-application = true;
         show-recents = false;
         static-only = true;
+
+        wvous-bl-corner = 1; # bottom left
+        wvous-br-corner = 14;
+        wvous-tl-corner = 1;
+        wvous-tr-corner = 1;
       };
       finder = {
         AppleShowAllExtensions = true;
