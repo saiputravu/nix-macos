@@ -11,9 +11,17 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Spotify skinning
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager }:
+  outputs = inputs@{
+    self,
+    nix-darwin,
+    nixpkgs,
+    home-manager,
+    spicetify-nix
+  }:
   let username = "sai"; in
   let homedir = "/Users/sai"; in
   let

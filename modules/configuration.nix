@@ -22,6 +22,10 @@
       aerospace
       ripgrep
       ice-bar
+      nixd
+      neofetch
+      btop
+      htop
     ];
   };
 

@@ -7,6 +7,9 @@
   inputs,
   ...
 }:
+let 
+  spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+in
 let saiHomeConfig = {
   pkgs,
   lib,
@@ -16,6 +19,11 @@ let saiHomeConfig = {
   homedir,
   ...
 }: {
+
+  imports = [
+      inputs.spicetify-nix.homeManagerModules.default
+  ];
+
   home = {
     stateVersion = "23.05";
 
@@ -31,6 +39,7 @@ let saiHomeConfig = {
       discord
       vscode
       zathura
+      spotify
     ];
 
     sessionVariables = {
@@ -38,7 +47,7 @@ let saiHomeConfig = {
     };
 
     file = {
-      ".zshrc" = ../configs/zshrc
+      ".zshrc".source = ../configs/zshrc;
     };
   };
 
@@ -46,6 +55,24 @@ let saiHomeConfig = {
     htop = {
         enable = true;
         settings.show_program_path = true;
+    };
+    git = {
+      enable = true;
+      userName = "${username}";
+      ignores = [".DS_STORE"];
+      extraConfig = {
+        init.defaultBranch = "main";
+        push.autoSetupRemote = true;
+      };
+    };
+    spicetify = {
+      enable = true;
+      theme = spicePkgs.themes.catppuccin;
+      colorScheme = "mocha";
+      enabledExtensions = with spicePkgs.extensions; [
+        keyboardShortcut
+        shuffle
+      ];
     };
   };
 
@@ -62,7 +89,7 @@ in
 
     useGlobalPkgs = true;
     useUserPackages = true;
-    verbose = true;
+    # verbose = true;
     users.sai = saiHomeConfig;
   };
 }
