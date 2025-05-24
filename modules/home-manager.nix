@@ -7,9 +7,6 @@
   inputs,
   ...
 }:
-let 
-  spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
-in
 let saiHomeConfig = {
   pkgs,
   lib,
@@ -39,9 +36,10 @@ let saiHomeConfig = {
       discord
       vscode
       zathura
-      spotify
+      spotify-unwrapped
       spicetify-cli
       obsidian
+      google-chrome
     ];
 
     sessionVariables = {
@@ -67,10 +65,14 @@ let saiHomeConfig = {
         push.autoSetupRemote = true;
       };
     };
-    spicetify = {
+    spicetify =
+    let 
+      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+    in
+    {
       enable = true;
-      theme = spicePkgs.themes.comfy;
-      colorScheme = "Velvet";
+      theme = spicePkgs.themes.ziro;
+      colorScheme = "red-dark";
       enabledExtensions = with spicePkgs.extensions; [
         keyboardShortcut
         shuffle
@@ -95,7 +97,6 @@ in
 
     useGlobalPkgs = true;
     useUserPackages = true;
-    # verbose = true;
     users.sai = saiHomeConfig;
   };
 }

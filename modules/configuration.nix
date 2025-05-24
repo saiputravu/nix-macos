@@ -23,9 +23,11 @@
       ripgrep
       ice-bar
       nixd
+      deadnix
       neofetch
       btop
       htop
+      tree
     ];
   };
 
