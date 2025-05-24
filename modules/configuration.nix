@@ -28,6 +28,7 @@
       btop
       htop
       tree
+      podman # Docker alternative
     ];
   };
 

@@ -21,7 +21,9 @@ let saiHomeConfig = {
       inputs.spicetify-nix.homeManagerModules.default
   ];
 
-  home = {
+  home = 
+  let steam-package = pkgs.callPackage ./steam.nix {}; in
+  {
     stateVersion = "23.05";
 
     username = username;
@@ -32,14 +34,20 @@ let saiHomeConfig = {
       # $ nix-env -qaP | grep wget
 
       # General GUI apps
+      google-chrome
       anki-bin
       discord
-      vscode
       zathura
+      obsidian
+
       spotify-unwrapped
       spicetify-cli
-      obsidian
-      google-chrome
+
+      colima
+      docker
+      vscode
+
+      steam-package
     ];
 
     sessionVariables = {
@@ -82,9 +90,13 @@ let saiHomeConfig = {
       enable = true;
       extraConfig = builtins.readFile ../configs/tmux.conf;
     };
+
+
+    home-manager = {
+        enable = true;
+    };
   };
 
-  programs.home-manager.enable = true;
 };
 in
 {
@@ -98,5 +110,6 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     users.sai = saiHomeConfig;
+    backupFileExtension = "hm-backup";
   };
 }
