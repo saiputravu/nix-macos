@@ -48,6 +48,7 @@ let saiHomeConfig = {
       vscode
 
       steam-package
+      prismlauncher
     ];
 
     sessionVariables = {
@@ -61,8 +62,8 @@ let saiHomeConfig = {
 
   programs = {
     htop = {
-        enable = true;
-        settings.show_program_path = true;
+      enable = true;
+      settings.show_program_path = true;
     };
     git = {
       enable = true;

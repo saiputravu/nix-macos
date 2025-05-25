@@ -28,10 +28,19 @@
       btop
       htop
       tree
-      podman # Docker alternative
     ];
   };
 
+  homebrew = {
+    enable = true;
+    onActivation.cleanup = "uninstall";
+    taps = [];
+    brews = [];
+    casks = [
+      "ghostty"
+      "mac-mouse-fix"
+    ];
+  };
 
   security = {
     pam.services.sudo_local = {

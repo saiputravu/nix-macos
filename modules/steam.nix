@@ -4,7 +4,7 @@ let
   # --- User-configurable values ---
   appName = "Steam"; # The name of the .app bundle, e.g., "VLC.app"
   pname = "steam"; # Lowercase package name
-  version = "1.0.0";       # Version of the application
+  version = "1.0.1";       # Version of the application
 
   # URL for the DMG file
   dmgUrl = "https://cdn.fastly.steamstatic.com/client/installer/steam.dmg";
