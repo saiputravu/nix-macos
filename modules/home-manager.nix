@@ -23,6 +23,7 @@ let saiHomeConfig = {
 
   home = 
   let steam-package = pkgs.callPackage ./steam.nix {}; in
+  let protonvpn-package = pkgs.callPackage ./protonvpn.nix {}; in
   {
     stateVersion = "23.05";
 
@@ -47,8 +48,11 @@ let saiHomeConfig = {
       docker
       vscode
 
-      steam-package
       prismlauncher
+
+      steam-package
+      protonvpn-package
+      undmg # Testing any issues with DMG installs.
     ];
 
     sessionVariables = {
