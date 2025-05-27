@@ -22,6 +22,7 @@
     home-manager,
     spicetify-nix
   }:
+  let hostname = "mahi"; in
   let username = "sai"; in
   let homedir = "/Users/sai"; in
   let
@@ -49,7 +50,7 @@
   {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#simple
-    darwinConfigurations."${username}" = nix-darwin.lib.darwinSystem {
+    darwinConfigurations."${hostname}" = nix-darwin.lib.darwinSystem {
       specialArgs = { inherit username homedir inputs; };
       modules = [
           configuration

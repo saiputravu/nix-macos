@@ -62,7 +62,38 @@ let saiHomeConfig = {
     file = {
       ".zshrc".source = ../configs/zshrc;
     };
+
+    # activation.forceSpicetifyReapply = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    #   echo "INFO: Forcing Spicetify reapplication on every Home Manager activation..."
+    #
+    #   # Ensure paths are set up for the command if not inheriting them fully
+    #   export PATH="${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:$PATH"
+    #
+    #   # The config file is managed by the programs.spicetify module
+    #   # and should contain the correct spotify_path due to 'spotifyApp' setting.
+    #   SPICETIFY_CONFIG_PATH="${config.xdg.configHome}/spicetify/config-xpui.ini"
+    #
+    #   if [ ! -f "$SPICETIFY_CONFIG_PATH" ]; then
+    #     echo "ERROR: Spicetify config file not found at $SPICETIFY_CONFIG_PATH. Skipping reapplication." >&2
+    #     exit 0 # Or exit 1 if you prefer to halt activation on this failure
+    #   fi
+    #
+    #   echo "INFO: Using Spicetify config: $SPICETIFY_CONFIG_PATH"
+    #   echo "INFO: Attempting 'spicetify backup apply'..."
+    #
+    #   # Attempt to apply Spicetify
+    #   # The -q flag makes it quieter on success
+    #   if ${pkgs.spicetify-cli}/bin/spicetify -c "$SPICETIFY_CONFIG_PATH" -q backup apply; then
+    #     echo "INFO: Spicetify 'backup apply' succeeded."
+    #   else
+    #     # If 'backup apply' fails, it might have printed errors.
+    #     # You could add more detailed error handling or retry logic if needed.
+    #     echo "ERROR: Spicetify 'backup apply' failed. Your Spotify theme might not be applied correctly." >&2
+    #     echo "INFO: You might need to run 'spicetify apply' manually or check Spotify/Spicetify permissions and paths."
+    #   fi
+    # '';
   };
+
 
   programs = {
     htop = {
