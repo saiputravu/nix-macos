@@ -67,8 +67,8 @@
   };
 
   networking = {
-    hostName = "sai";
-    computerName = "Sai";
+    hostName = "mahi";
+    computerName = "Mahi";
   };
 
   fonts = {
