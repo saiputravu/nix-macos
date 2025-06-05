@@ -39,6 +39,9 @@
     casks = [
       "ghostty"
       "mac-mouse-fix"
+      "orion"
+      "tailscale"
+      "folx"
     ];
   };
 
@@ -88,6 +91,9 @@
     primaryUser = "sai";
 
     defaults = {
+      CustomUserPreferences.NSGlobalDomain = {
+        "com.apple.sound.uiaudio.enabled" = false;
+      };
       NSGlobalDomain = {
         InitialKeyRepeat = 15;
         KeyRepeat = 1;

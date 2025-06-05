@@ -35,18 +35,20 @@ let saiHomeConfig = {
       # $ nix-env -qaP | grep wget
 
       # General GUI apps
+      arc-browser
       google-chrome
       anki-bin
       discord
       zathura
       obsidian
 
-      spotify-unwrapped
+      # spotify-unwrapped
       spicetify-cli
 
       colima
       docker
       vscode
+      rustscan # fast rust nmap scanner
 
       prismlauncher
 
@@ -115,8 +117,8 @@ let saiHomeConfig = {
     in
     {
       enable = true;
-      theme = spicePkgs.themes.ziro;
-      colorScheme = "red-dark";
+      theme = spicePkgs.themes.defaultDynamic;
+      # colorScheme = "red-dark";
       enabledExtensions = with spicePkgs.extensions; [
         keyboardShortcut
         shuffle
@@ -126,7 +128,6 @@ let saiHomeConfig = {
       enable = true;
       extraConfig = builtins.readFile ../configs/tmux.conf;
     };
-
 
     home-manager = {
         enable = true;
