@@ -1,0 +1,14 @@
+theme = "gruvbox_dark_soft"
+
+[editor]
+line-number = "relative"
+scrolloff = 25
+shell = "/Users/sai/.cache/zsh4humans/v5/zsh4humans/zb/zsh"
+
+[[language]]
+name = "go"
+auto-format = true
+
+[[language]]
+name = "cpp"
+auto-format = true

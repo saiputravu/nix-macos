@@ -108,3 +108,8 @@ alias gsh='git show'
 alias gp='git pull'
 alias gr='git rebase'
 alias ga='git add'
+
+alias cdconf='cd ~/.config/nix-darwin-config/'
+
+# Opam settings
+[[ ! -r '/Users/sai/.opam/opam-init/init.zsh' ]] || source '/Users/sai/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null

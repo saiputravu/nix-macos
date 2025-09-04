@@ -18,7 +18,6 @@
       go
       tree-sitter
       nodejs_24
-      opam
       aerospace
       ripgrep
       ice-bar
@@ -42,6 +41,11 @@
       "orion"
       "tailscale"
       "folx"
+      "gimp"
+      "citrix-workspace"
+      "webex"
+      "altserver"
+      "utm"
     ];
   };
 

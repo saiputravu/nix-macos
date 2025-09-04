@@ -50,8 +50,19 @@ let saiHomeConfig = {
       vscode
       rustscan # fast rust nmap scanner
 
+      # Editors
+      helix
+
+      # Ocaml deps
+      ocaml
+      opam
+      dune_3
+      ocamlPackages.ocamlformat
+
+      # Minecraft deps
       prismlauncher
 
+      # Gaming deps
       steam-package
       protonvpn-package
       undmg # Testing any issues with DMG installs.
@@ -63,6 +74,7 @@ let saiHomeConfig = {
 
     file = {
       ".zshrc".source = ../configs/zshrc;
+      ".config/helix/config.toml".source = ../configs/helix-config.toml;
     };
 
     # activation.forceSpicetifyReapply = lib.hm.dag.entryAfter ["writeBoundary"] ''
