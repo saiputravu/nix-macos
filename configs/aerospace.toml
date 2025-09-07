@@ -311,7 +311,7 @@ cmd-enter = 'exec-and-forget open -n /Volumes/Macintosh\ HD/Applications/Ghostty
 #cmd-m = 'exec-and-forget open -n /Volumes/Macintosh\ HD/Applications/Marta.app'
 
 cmd-shift-f = 'macos-native-fullscreen'
-cmd-f = 'fullscreen'
+# cmd-f = 'fullscreen'
 
 alt-g = 'split horizontal'
 alt-v = 'split vertical'
@@ -345,7 +345,7 @@ cmd-7 = 'workspace --auto-back-and-forth 7'  # Chat
 cmd-8 = 'workspace --auto-back-and-forth 8'  # Mail
 cmd-9 = 'workspace --auto-back-and-forth 9'  # Music
 cmd-0 = 'workspace --auto-back-and-forth 10' # Secrets
-cmd-t = 'workspace --auto-back-and-forth t'  # Meeting
+# cmd-t = 'workspace --auto-back-and-forth t'  # Meeting
 
 cmd-shift-1 = 'move-node-to-workspace 1'
 cmd-shift-2 = 'move-node-to-workspace 2'
@@ -357,7 +357,7 @@ cmd-shift-7 = 'move-node-to-workspace 7'
 cmd-shift-8 = 'move-node-to-workspace 8'
 cmd-shift-9 = 'move-node-to-workspace 9'
 cmd-shift-0 = 'move-node-to-workspace 10'
-cmd-shift-t = 'move-node-to-workspace t'
+# cmd-shift-t = 'move-node-to-workspace t'
 
 cmd-tab = 'workspace-back-and-forth'
 cmd-p = 'move-workspace-to-monitor --wrap-around next'
