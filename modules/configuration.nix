@@ -35,6 +35,7 @@
     taps = ["FelixKratz/formulae"];
     brews = [
       "sketchybar"
+      "borders"
     ];
     casks = [
       "ghostty"
@@ -76,7 +77,7 @@
   services = {
     aerospace = {
       enable = true;
-      settings = pkgs.lib.importTOML ../configs/aerospace.toml;
+      settings = pkgs.lib.importTOML ../configs/aerospace/aerospace.toml;
     };
   };
 

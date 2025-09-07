@@ -84,6 +84,10 @@ let saiHomeConfig = {
         source = ../configs/ghostty;
         recursive = true;
       };
+      ".config/aerospace" = {
+        source = ../configs/aerospace;
+        recursive = true;
+      };
     };
 
     # activation.forceSpicetifyReapply = lib.hm.dag.entryAfter ["writeBoundary"] ''
