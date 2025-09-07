@@ -42,6 +42,9 @@ let saiHomeConfig = {
       zathura
       obsidian
 
+      # Terms
+      ghostty
+
       # spotify-unwrapped
       spicetify-cli
 
@@ -78,6 +81,10 @@ let saiHomeConfig = {
       ".config/helix/languages.toml".source = ../configs/helix-languages.toml;
       ".config/sketchybar" = {
         source = ../configs/sketchybar;
+        recursive = true;
+      };
+      ".config/ghostty" = {
+        source = ../configs/ghostty;
         recursive = true;
       };
     };
@@ -144,6 +151,9 @@ let saiHomeConfig = {
     tmux = {
       enable = true;
       extraConfig = builtins.readFile ../configs/tmux.conf;
+    };
+    ghostty = {
+      enable = true;
     };
 
     home-manager = {
