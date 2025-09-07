@@ -1,4 +1,4 @@
-theme = "gruvbox_dark_soft"
+theme = "merionette"
 
 [editor]
 scrolloff = 25
@@ -22,7 +22,7 @@ center = [
 right = ["position", "position-percentage", "total-line-numbers"]
 mode.normal = "NORMAL"
 mode.insert = "INSERT"
-mode.select = "SElECT"
+mode.select = "SELECT"
 
 [editor.indent-guides]
 render = true
@@ -40,7 +40,7 @@ wrap-indicator = "⏎ "
 render = "all"
 
 [editor.whitespace.characters]
-space = "·"
+space = "."
 nbsp = "⍽"
 nnbsp = "␣"
 tab = "→"
@@ -49,6 +49,7 @@ tabpad = "·"  # Tabs will look like "→···" (depending on tab width)
 
 [keys.normal]
 g = { a = "code_action" }
+"C-." = "repeat_last_motion"
 "space" = { "." = ":toggle-option lsp.display-inlay-hints" }
 "G" = "goto_file_end"
 

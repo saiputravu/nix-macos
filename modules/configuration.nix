@@ -20,7 +20,7 @@
       nodejs_24
       aerospace
       ripgrep
-      ice-bar
+      sketchybar
       nixd
       deadnix
       neofetch
@@ -46,6 +46,7 @@
       "webex"
       "altserver"
       "utm"
+      "font-hack-nerd-font" # Default font for sketchybar
     ];
   };
 
@@ -99,6 +100,7 @@
         "com.apple.sound.uiaudio.enabled" = false;
       };
       NSGlobalDomain = {
+        AppleMenuBarAutoHideMode = 2; # Required for sketchybar
         InitialKeyRepeat = 15;
         KeyRepeat = 1;
 
