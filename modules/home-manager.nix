@@ -149,9 +149,6 @@ let saiHomeConfig = {
       enable = true;
       extraConfig = builtins.readFile ../configs/tmux.conf;
     };
-    ghostty = {
-      enable = true;
-    };
 
     home-manager = {
         enable = true;
