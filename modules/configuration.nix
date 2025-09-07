@@ -99,8 +99,10 @@
       CustomUserPreferences.NSGlobalDomain = {
         "com.apple.sound.uiaudio.enabled" = false;
       };
-      NSGlobalDomain = {
+      global = {
         AppleMenuBarAutoHideMode = 2; # Required for sketchybar
+      };
+      NSGlobalDomain = {
         InitialKeyRepeat = 15;
         KeyRepeat = 1;
 
