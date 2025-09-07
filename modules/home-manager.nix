@@ -147,6 +147,11 @@ let saiHomeConfig = {
     };
   };
 
+  targets.darwin.defaults = {
+      NSGlobalDomain = {
+        AppleMenuBarAutoHideMode = 2; # Required for sketchybar
+      };
+  };
 };
 in
 {
