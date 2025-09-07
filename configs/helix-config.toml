@@ -1,6 +1,56 @@
 theme = "gruvbox_dark_soft"
 
 [editor]
-line-number = "relative"
 scrolloff = 25
-shell = ["/Users/sai/.cache/zsh4humans/v5/zsh4humans/zb/zsh", "-c"]
+line-number = "relative"
+rulers = [100, 120]
+auto-save = true
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true
+
+[editor.statusline]
+left = ["mode", "spinner", "diagnostics"]
+center = [
+  "file-modification-indicator",
+  "file-name",
+  "separator",
+  "version-control",
+  "separator",
+]
+right = ["position", "position-percentage", "total-line-numbers"]
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SElECT"
+
+[editor.indent-guides]
+render = true
+character = "╎" # Some characters that work well: "▏", "┆", "┊", "⸽"
+skip-levels = 1
+
+[editor.file-picker]
+hidden = false
+
+[editor.soft-wrap]
+enable = true
+wrap-indicator = "⏎ "
+
+[editor.whitespace]
+render = "all"
+
+[editor.whitespace.characters]
+space = "·"
+nbsp = "⍽"
+nnbsp = "␣"
+tab = "→"
+newline = "⏎"
+tabpad = "·"  # Tabs will look like "→···" (depending on tab width)
+
+[keys.normal]
+g = { a = "code_action" }
+"space" = { "." = ":toggle-option lsp.display-inlay-hints" }
+"G" = "goto_file_end"
+
+[keys.insert]
+j = { k = "normal_mode" }
