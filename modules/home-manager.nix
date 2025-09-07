@@ -77,7 +77,7 @@ let saiHomeConfig = {
       ".config/helix/config.toml".source = ../configs/helix-config.toml;
       ".config/helix/languages.toml".source = ../configs/helix-languages.toml;
       ".config/sketchybar" = {
-        source = "../configs/sketchybar/";
+        source = ../configs/sketchybar;
         recursive = true;
       };
     };
