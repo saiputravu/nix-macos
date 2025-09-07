@@ -26,6 +26,7 @@
       btop
       htop
       tree
+      lua
     ];
   };
 
@@ -56,14 +57,14 @@
   launchd.user.agents = {
     # Launching sketchybar as a service using launchd, instead of suggested homebrew.
     sketchybar = {
-      serviceConfig = {
-        Label = "com.felixkratz.sketchybar";
-        Program = "/opt/homebrew/bin/sketchybar"; # Abs path for homebrew on silicon macs
-        RunAtLoad = true; # Enable at login
-        KeepAlive = true; # Restart on crash
-        StandardOutPath = "/tmp/sketchybar.out.log";
-        StandardErrorPath = "/tmp/sketchybar.err.log";
-      };
+      # serviceConfig = {
+      #   Label = "com.felixkratz.sketchybar";
+      #   Program = "/opt/homebrew/bin/sketchybar"; # Abs path for homebrew on silicon macs
+      #   RunAtLoad = true; # Enable at login
+      #   KeepAlive = true; # Restart on crash
+      #   StandardOutPath = "/tmp/sketchybar.out.log";
+      #   StandardErrorPath = "/tmp/sketchybar.err.log";
+      # };
     };
   };
 
