@@ -76,6 +76,10 @@ let saiHomeConfig = {
       ".zshrc".source = ../configs/zshrc;
       ".config/helix/config.toml".source = ../configs/helix-config.toml;
       ".config/helix/languages.toml".source = ../configs/helix-languages.toml;
+      ".config/sketchybar" = {
+        source = "../configs/sketchybar/";
+        recursive = true;
+      };
     };
 
     # activation.forceSpicetifyReapply = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -145,12 +149,6 @@ let saiHomeConfig = {
     home-manager = {
         enable = true;
     };
-  };
-
-  targets.darwin.defaults = {
-      NSGlobalDomain = {
-        AppleMenuBarAutoHideMode = 2; # Required for sketchybar
-      };
   };
 };
 in
