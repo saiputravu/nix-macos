@@ -42,9 +42,6 @@ let saiHomeConfig = {
       zathura
       obsidian
 
-      # Terms
-      ghostty
-
       # spotify-unwrapped
       spicetify-cli
 
