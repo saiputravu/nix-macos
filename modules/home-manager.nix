@@ -42,6 +42,9 @@ let saiHomeConfig = {
       zathura
       obsidian
 
+     # VPN
+     tailscale
+
       # spotify-unwrapped
       spicetify-cli
 
@@ -76,10 +79,6 @@ let saiHomeConfig = {
       ".zshrc".source = ../configs/zshrc;
       ".config/helix/config.toml".source = ../configs/helix-config.toml;
       ".config/helix/languages.toml".source = ../configs/helix-languages.toml;
-      ".config/sketchybar" = {
-        source = ../configs/sketchybar;
-        recursive = true;
-      };
       ".config/ghostty" = {
         source = ../configs/ghostty;
         recursive = true;

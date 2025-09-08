@@ -35,37 +35,19 @@
     onActivation.cleanup = "uninstall";
     taps = ["FelixKratz/formulae"];
     brews = [
-      "sketchybar"
       "borders"
     ];
     casks = [
       "ghostty"
       "mac-mouse-fix"
       "orion"
-      "tailscale"
       "folx"
       "gimp"
       "citrix-workspace"
       "webex"
       "altserver"
       "utm"
-      "font-hack-nerd-font" # Default font for sketchybar
     ];
-  };
-
-  # https://nix-darwin.github.io/nix-darwin/manual/index.html
-  launchd.user.agents = {
-    # Launching sketchybar as a service using launchd, instead of suggested homebrew.
-    sketchybar = {
-      # serviceConfig = {
-      #   Label = "com.felixkratz.sketchybar";
-      #   Program = "/opt/homebrew/bin/sketchybar"; # Abs path for homebrew on silicon macs
-      #   RunAtLoad = true; # Enable at login
-      #   KeepAlive = true; # Restart on crash
-      #   StandardOutPath = "/tmp/sketchybar.out.log";
-      #   StandardErrorPath = "/tmp/sketchybar.err.log";
-      # };
-    };
   };
 
   security = {
@@ -132,7 +114,7 @@
         "com.apple.mouse.tapBehavior" = 1;
         "com.apple.trackpad.enableSecondaryClick" = false;
 
-        _HIHideMenuBar = true; # Need for sketchybar
+        _HIHideMenuBar = false; 
       };
       controlcenter = {
           AirDrop = true;

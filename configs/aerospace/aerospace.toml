@@ -229,14 +229,9 @@ after-login-command = []
 
 after-startup-command = [
   'exec-and-forget /opt/homebrew/opt/borders/bin/borders inactive_color=0xFF660000 active_color=0xFFFFCB47 width=3.0 style=round hidpi=on order=above', 
-  'exec-and-forget /opt/homebrew/opt/sketchybar/bin/sketchybar'
 ]
 
-exec-on-workspace-change = [
-  '/bin/bash',
-  '-c',
-  'sketchybar --trigger aerospace_workspace_changed FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-]
+exec-on-workspace-change = []
 
 on-focused-monitor-changed = [
   'move-mouse monitor-lazy-center'
@@ -244,8 +239,6 @@ on-focused-monitor-changed = [
 
 on-focus-changed = [
   'move-mouse window-lazy-center',
-  'exec-and-forget /bin/bash -c /opt/homebrew/bin/sketchybar --trigger front_app_switched',
-  'exec-and-forget sketchybar --trigger update_windows'
 ]
 
 enable-normalization-flatten-containers = false
@@ -277,7 +270,6 @@ PATH = '/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
 # cmd-space = 'layout floating tiling'
 alt-shift-r = [
   'mode resize',
-  'exec-and-forget sketchybar --trigger send_message MESSAGE="RESIZE MODE" HOLD="true"'
 ]
 
 # cmd-keypadMinus = 'resize smart -70'
@@ -285,7 +277,6 @@ alt-shift-r = [
 
 cmd-g = [
    'mode join',
-   'exec-and-forget sketchybar --trigger send_message MESSAGE="JOIN MODE" HOLD="true"'
 ]
 
 cmd-q = [
@@ -370,35 +361,27 @@ cmd-alt-h = []
 
 alt-shift-s = [
   'mode service',
-  'exec-and-forget sketchybar --trigger send_message MESSAGE="SERVICE MODE" HOLD="true"'
 ]
 
 [mode.service.binding]
 esc = [
  'reload-config',
- 'exec-and-forget sketchybar --trigger hide_message',
- 'exec-and-forget sketchybar --reload',
  'mode main'
 ]
 r = ['flatten-workspace-tree', 'mode main'] # reset layout
 #s = ['layout sticky tiling', 'mode main'] # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 
 s = [
-    'exec-and-forget cat ~/.config/aerospace/shrugstring| pbcopy',
-   'exec-and-forget sketchybar --trigger hide_message',
+   'exec-and-forget cat ~/.config/aerospace/shrugstring| pbcopy',
    'mode main'
 ] 
 
 b = [
    'exec-and-forget ~/.config/aerospace/presentation.sh on',
-   'exec-and-forget sketchybar --bar height=0',
-   'exec-and-forget sketchybar --trigger hide_message',
    'mode main'
 ]
 shift-b = [
    'exec-and-forget ~/.config/aerospace/presentation.sh off',
-   'exec-and-forget sketchybar --bar height=36',
-   'exec-and-forget sketchybar --trigger hide_message',
    'mode main'
 ]
 
@@ -413,27 +396,23 @@ k = ['resize height +64']
 l = ['resize width +64']
 esc = [
   'mode main',
-  'exec-and-forget sketchybar --trigger hide_message'
 ]
 enter = [
   'mode main',
-  'exec-and-forget sketchybar --trigger hide_message'
 ]
 
 [mode.join.binding]
-h = ['join-with left', 'mode main', 'exec-and-forget sketchybar --trigger hide_message']
-j = ['join-with down', 'mode main', 'exec-and-forget sketchybar --trigger hide_message']
-k = ['join-with up', 'mode main', 'exec-and-forget sketchybar --trigger hide_message']
-l = ['join-with right', 'mode main', 'exec-and-forget sketchybar --trigger hide_message']
-cmd-h = ['join-with left', 'mode main', 'exec-and-forget sketchybar --trigger hide_message']
-cmd-alt-h = ['join-with left', 'mode main', 'exec-and-forget sketchybar --trigger hide_message']
+h = ['join-with left', 'mode main']
+j = ['join-with down', 'mode main']
+k = ['join-with up', 'mode main']
+l = ['join-with right', 'mode main']
+cmd-h = ['join-with left', 'mode main']
+cmd-alt-h = ['join-with left', 'mode main']
 esc = [
   'mode main',
-  'exec-and-forget sketchybar --trigger hide_message'
 ]
 enter = [
   'mode main',
-  'exec-and-forget sketchybar --trigger hide_message'
 ]
 
 [[on-window-detected]]
