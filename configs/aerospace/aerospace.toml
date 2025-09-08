@@ -228,7 +228,7 @@ start-at-login = false
 after-login-command = []
 
 after-startup-command = [
-  'exec-and-forget /opt/homebrew/opt/borders/bin/borders inactive_color=0xFF660000 active_color=0xFFFFCB47 width=5.0', 
+  'exec-and-forget /opt/homebrew/opt/borders/bin/borders inactive_color=0xFF660000 active_color=0xFFFFCB47 width=3.0 style=round hidpi=on order=above', 
   'exec-and-forget /opt/homebrew/opt/sketchybar/bin/sketchybar'
 ]
 
@@ -291,7 +291,7 @@ cmd-g = [
 cmd-q = [
   'close --quit-if-last-window'
 ]
-cmd-w = []
+# cmd-w = []
 
 # All possible keys:
 # - Letters.        a, b, c, ..., z
@@ -346,6 +346,7 @@ cmd-8 = 'workspace --auto-back-and-forth 8'  # Mail
 cmd-9 = 'workspace --auto-back-and-forth 9'  # Music
 cmd-0 = 'workspace --auto-back-and-forth 10' # Secrets
 # cmd-t = 'workspace --auto-back-and-forth t'  # Meeting
+ctrl-t = []
 
 cmd-shift-1 = 'move-node-to-workspace 1'
 cmd-shift-2 = 'move-node-to-workspace 2'
