@@ -32,12 +32,13 @@
 
   homebrew = {
     enable = true;
-    onActivation.cleanup = "uninstall";
+    # onActivation.cleanup = "uninstall";
     taps = ["FelixKratz/formulae"];
     brews = [
       "borders"
     ];
     casks = [
+      "tailscale"
       "ghostty"
       "mac-mouse-fix"
       "orion"
