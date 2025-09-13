@@ -45,6 +45,14 @@
         name = username;
         home = homedir;
       };
+
+      nixpkgs.overlays = [
+        (self: super: {
+          libsForQt5 = super.libsForQt5 // {
+            fcitx5-with-addons = super.fcitx5;
+          };
+        })
+      ];
     };
   in
   {

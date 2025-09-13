@@ -48,6 +48,7 @@
       "webex"
       "altserver"
       "utm"
+      "arc"
     ];
   };
 
@@ -81,7 +82,7 @@
   };
 
   fonts = {
-    packages = with pkgs; [
+    packages = [
         # pkgs.nerd-fonts.JetBrainsMono
         pkgs.nerd-fonts._0xproto
         pkgs.nerd-fonts.droid-sans-mono

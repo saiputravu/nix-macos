@@ -35,14 +35,13 @@ let saiHomeConfig = {
       # $ nix-env -qaP | grep wget
 
       # General GUI apps
-      arc-browser
       google-chrome
       anki-bin
       discord
       zathura
       obsidian
 
-      # spotify-unwrapped
+      spotify-unwrapped
       spicetify-cli
 
       colima
