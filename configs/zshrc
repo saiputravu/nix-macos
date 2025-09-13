@@ -102,11 +102,14 @@ setopt no_auto_menu  # require an extra TAB press to open the completion menu
 alias rebuild='sudo darwin-rebuild switch --flake ~/.config/nix-darwin-config/'
 alias vim=nvim
 alias gs='git status'
+alias gsw='git switch'
 alias gd='git diff'
+alias gds='git diff --staged'
 alias gc='git commit'
 alias gsh='git show'
 alias gp='git pull'
 alias gr='git rebase'
+function gri() { git rebase -i HEAD~$1 }
 alias ga='git add'
 
 alias cdconf='cd ~/.config/nix-darwin-config/'

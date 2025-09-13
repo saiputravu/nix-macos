@@ -3,14 +3,17 @@
 	name = sai
 [core]
 	editor = nvim
-    pager = delta
+	pager = delta
 
 [interactive]
-    diffFilter = delta --color-only
+	diffFilter = delta --color-only
 
 [delta]
-    navigate = true  # use n and N to move between diff sections
-    dark = true      # or light = true, or omit for auto-detection
+	true-color = always
+	navigate = true      # use n and N to move between diff sections
+	dark = true          # or light = true, or omit for auto-detection
+	hyperlinks = true
+	line-numbers = true
 
 [merge]
     conflictStyle = zdiff3
