@@ -53,6 +53,9 @@ let saiHomeConfig = {
       # Editors
       helix
 
+      # Git
+      delta
+
       # Ocaml deps
       ocaml
       opam
@@ -74,6 +77,7 @@ let saiHomeConfig = {
 
     file = {
       ".zshrc".source = ../configs/zshrc;
+      ".gitconfig".source = ../configs/gitconfig;
       ".config/helix/config.toml".source = ../configs/helix/config.toml;
       ".config/helix/languages.toml".source = ../configs/helix/languages.toml;
       ".config/ghostty" = {
