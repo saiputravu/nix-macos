@@ -3,3 +3,13 @@ name = "cpp"
 auto-format = true
 file-types = ["cpp", "h"]
 indent = { tab-width = 2, unit = "\t" }
+
+[[language]]
+name = "ocaml"
+auto-format = true
+formatter = { command = "ocamlformat %{buffer_name}" }
+file-types = ["ml", "mli"]
+
+[[language]]
+name = "rust"
+auto-format = true

@@ -49,6 +49,7 @@
       "altserver"
       "utm"
       "arc"
+      "spotify"
     ];
   };
 

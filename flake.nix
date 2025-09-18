@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Spotify skinning
-    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+    # spicetify-nix.url = "github:Gerg-L/spicetify-nix";
   };
 
   outputs = inputs@{
@@ -20,7 +20,7 @@
     nix-darwin,
     nixpkgs,
     home-manager,
-    spicetify-nix
+    # spicetify-nix
   }:
   let hostname = "mahi"; in
   let username = "sai"; in

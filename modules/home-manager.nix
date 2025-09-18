@@ -18,7 +18,7 @@ let saiHomeConfig = {
 }: {
 
   imports = [
-      inputs.spicetify-nix.homeManagerModules.default
+      # inputs.spicetify-nix.homeManagerModules.default
   ];
 
   home = 
@@ -41,13 +41,19 @@ let saiHomeConfig = {
       zathura
       obsidian
 
-      spotify-unwrapped
-      spicetify-cli
+      # spicetify-cli
 
       colima
       docker
       vscode
       rustscan # fast rust nmap scanner
+
+      # Rust deps
+      rustc
+      cargo
+      rustfmt
+      rust-analyzer
+      rustPackages.clippy
 
       # Editors
       helix
@@ -135,19 +141,19 @@ let saiHomeConfig = {
         push.autoSetupRemote = true;
       };
     };
-    spicetify =
-    let 
-      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
-    in
-    {
-      enable = true;
-      theme = spicePkgs.themes.defaultDynamic;
-      # colorScheme = "red-dark";
-      enabledExtensions = with spicePkgs.extensions; [
-        keyboardShortcut
-        shuffle
-      ];
-    };
+    # spicetify =
+    # let 
+    #   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+    # in
+    # {
+    #   enable = true;
+    #   theme = spicePkgs.themes.defaultDynamic;
+    #   # colorScheme = "red-dark";
+    #   enabledExtensions = with spicePkgs.extensions; [
+    #     keyboardShortcut
+    #     shuffle
+    #   ];
+    # };
     tmux = {
       enable = true;
       extraConfig = builtins.readFile ../configs/tmux.conf;
