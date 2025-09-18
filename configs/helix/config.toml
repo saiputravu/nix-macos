@@ -5,6 +5,8 @@ scrolloff = 25
 line-number = "relative"
 rulers = [100, 120]
 auto-save = true
+true-color = true
+idle-timeout = 0
 
 [editor.lsp]
 display-messages = true
@@ -52,6 +54,12 @@ g = { a = "code_action" }
 "C-." = "repeat_last_motion"
 "space" = { "." = ":toggle-option lsp.display-inlay-hints" }
 "G" = "goto_file_end"
+"X" = ["extend_line_up", "extend_to_line_bounds"]
+
+[keys.normal.space]
+"." = ":toggle-option lsp.display-inlay-hints"
+q = ":buffer-close"
+l = ":sh git log -n 5 --no-patch -L%{cursor_line},+1:%{buffer_name}"
 
 [keys.insert]
 j = { k = "normal_mode" }
