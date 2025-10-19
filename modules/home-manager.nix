@@ -40,6 +40,7 @@ let saiHomeConfig = {
       anki-bin
       discord
       zathura
+      sioyek
       obsidian
       ice-bar
 
