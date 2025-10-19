@@ -122,7 +122,7 @@ function zathura-web {
   fi 
   FILE="/tmp/out.pdf"
   curl "$1" -s --output $FILE
-  zathura --fork $FILE 2&>1 > /dev/null && sleep 0.5 && rm -f $FILE
+  zathura --fork $FILE 2>&1 > /dev/null && sleep 0.5 && rm -f $FILE
 }
 
 # Opam settings
