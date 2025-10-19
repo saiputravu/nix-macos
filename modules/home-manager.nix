@@ -36,10 +36,12 @@ let saiHomeConfig = {
 
       # General GUI apps
       google-chrome
+      firefox-unwrapped
       anki-bin
       discord
       zathura
       obsidian
+      ice-bar
 
       # spicetify-cli
 
@@ -67,6 +69,10 @@ let saiHomeConfig = {
       dune_3
       ocamlPackages.ocamlformat
 
+      # Cpp deps
+      cmake
+      bear
+
       # Minecraft deps
       prismlauncher
 
@@ -91,6 +97,10 @@ let saiHomeConfig = {
       };
       ".config/aerospace" = {
         source = ../configs/aerospace;
+        recursive = true;
+      };
+      ".config/zathura" = {
+        source = ../configs/zathura;
         recursive = true;
       };
     };

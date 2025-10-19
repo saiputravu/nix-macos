@@ -38,7 +38,7 @@
       "borders"
     ];
     casks = [
-      "tailscale"
+      "tailscale-app"
       "ghostty"
       "mac-mouse-fix"
       "orion"
@@ -49,7 +49,10 @@
       "altserver"
       "utm"
       "arc"
+      "zen"
       "spotify"
+      "Sikarugir-App/sikarugir/sikarugir"
+      "porting-kit"
     ];
   };
 

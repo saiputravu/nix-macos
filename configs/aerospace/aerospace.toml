@@ -227,19 +227,15 @@ start-at-login = false
 
 after-login-command = []
 
-after-startup-command = [
-  'exec-and-forget /opt/homebrew/opt/borders/bin/borders inactive_color=0xFF660000 active_color=0xFFFFCB47 width=3.0 style=round hidpi=on order=above', 
-]
+# after-startup-command = [
+#   'exec-and-forget /opt/homebrew/opt/borders/bin/borders inactive_color=0xFF660000 active_color=0xFFFFCB47 width=3.0 style=round hidpi=on order=above', 
+# ]
 
 exec-on-workspace-change = []
 
-on-focused-monitor-changed = [
-  'move-mouse monitor-lazy-center'
-]
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
-on-focus-changed = [
-  'move-mouse window-lazy-center',
-]
+on-focus-changed = ['move-mouse window-lazy-center']
 
 enable-normalization-flatten-containers = false
 enable-normalization-opposite-orientation-for-nested-containers = false
@@ -252,16 +248,22 @@ default-root-container-orientation = 'auto'
 
 key-mapping.preset = 'qwerty'
 
+[[on-window-detected]]
+if.app-id = 'app.zen-browser.zen'
+if.window-title-regex-substring = 'Picture-in-Picture'
+run = 'layout floating'
+
+
 [gaps]
 #outer.bottom numbers have to match presentation.sh variables. built-in retina display is excluded from presentation mode, so this only works on external monitors.
 # outer.bottom =        [{monitor.'^built-in retina display$' = 20 }, 27]
 # outer.top =        [{monitor.'^built-in retina display$' = 30 }, 62]
-outer.bottom =     13
-outer.top =        13
-outer.left =       13
-outer.right =      13
+outer.bottom = 13
+outer.top = 13
+outer.left = 13
+outer.right = 13
 inner.horizontal = 13
-inner.vertical =   13
+inner.vertical = 13
 
 
 [workspace-to-monitor-force-assignment]
@@ -270,27 +272,21 @@ inner.vertical =   13
 2 = ['2', '1']
 3 = ['3', '2', '1']
 
-[exec]                   # Again, you don't need to copy all config sections to your config.
-inherit-env-vars = true  # If you don't touch "exec" section,
-[exec.env-vars]          # it will fallback to "default-config.toml"
+[exec] # Again, you don't need to copy all config sections to your config.
+inherit-env-vars = true # If you don't touch "exec" section,
+[exec.env-vars] # it will fallback to "default-config.toml"
 PATH = '/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
 
 [mode.main.binding]
 # cmd-space = 'layout floating tiling'
-alt-shift-r = [
-  'mode resize',
-]
+alt-shift-r = ['mode resize']
 
 # cmd-keypadMinus = 'resize smart -70'
 # cmd-keypadPlus = 'resize smart +70'
 
-cmd-g = [
-   'mode join',
-]
+cmd-g = ['mode join']
 
-cmd-q = [
-  'close --quit-if-last-window'
-]
+cmd-q = ['close --quit-if-last-window']
 # cmd-w = []
 
 # All possible keys:
@@ -339,18 +335,18 @@ cmd-shift-up = 'move up'
 cmd-shift-right = 'move right'
 
 #cmd-1 = 'summon-workspace 1'  # Notes
-cmd-1 = 'workspace --auto-back-and-forth 1'  # Notes
-cmd-2 = 'workspace --auto-back-and-forth 2'  # Terminal
-cmd-3 = 'workspace --auto-back-and-forth 3'  # Browser
-cmd-4 = 'workspace --auto-back-and-forth 4'  # AltBrowser
-cmd-5 = 'workspace --auto-back-and-forth 5'  # Remote
-cmd-6 = 'workspace --auto-back-and-forth 6'  # Database
-cmd-7 = 'workspace --auto-back-and-forth 7'  # Chat
-cmd-8 = 'workspace --auto-back-and-forth 8'  # Mail
-cmd-9 = 'workspace --auto-back-and-forth 9'  # Music
+cmd-1 = 'workspace --auto-back-and-forth 1' # Notes
+cmd-2 = 'workspace --auto-back-and-forth 2' # Terminal
+cmd-3 = 'workspace --auto-back-and-forth 3' # Browser
+cmd-4 = 'workspace --auto-back-and-forth 4' # AltBrowser
+cmd-5 = 'workspace --auto-back-and-forth 5' # Remote
+cmd-6 = 'workspace --auto-back-and-forth 6' # Database
+cmd-7 = 'workspace --auto-back-and-forth 7' # Chat
+cmd-8 = 'workspace --auto-back-and-forth 8' # Mail
+cmd-9 = 'workspace --auto-back-and-forth 9' # Music
 cmd-0 = 'workspace --auto-back-and-forth 0' # Secrets
 # cmd-t = 'workspace --auto-back-and-forth t'  # Meeting
-ctrl-t = []
+# ctrl-t = []
 
 cmd-shift-1 = 'move-node-to-workspace 1'
 cmd-shift-2 = 'move-node-to-workspace 2'
@@ -368,34 +364,23 @@ cmd-tab = 'workspace-back-and-forth'
 cmd-p = 'move-workspace-to-monitor --wrap-around next'
 cmd-shift-p = [
   'move-node-to-monitor --wrap-around next',
-  'focus-monitor next --wrap-around' 
+  'focus-monitor next --wrap-around',
 ]
 cmd-alt-h = []
 
-alt-shift-s = [
-  'mode service',
-]
+alt-shift-s = ['mode service']
 
 [mode.service.binding]
-esc = [
- 'reload-config',
- 'mode main'
-]
+esc = ['reload-config', 'mode main']
 r = ['flatten-workspace-tree', 'mode main'] # reset layout
 #s = ['layout sticky tiling', 'mode main'] # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 
-s = [
-   'exec-and-forget cat ~/.config/aerospace/shrugstring| pbcopy',
-   'mode main'
-] 
+s = ['exec-and-forget cat ~/.config/aerospace/shrugstring| pbcopy', 'mode main']
 
-b = [
-   'exec-and-forget ~/.config/aerospace/presentation.sh on',
-   'mode main'
-]
+b = ['exec-and-forget ~/.config/aerospace/presentation.sh on', 'mode main']
 shift-b = [
-   'exec-and-forget ~/.config/aerospace/presentation.sh off',
-   'mode main'
+  'exec-and-forget ~/.config/aerospace/presentation.sh off',
+  'mode main',
 ]
 
 backspace = ['close-all-windows-but-current', 'mode main']
@@ -407,12 +392,8 @@ h = ['resize width -64']
 j = ['resize height -64']
 k = ['resize height +64']
 l = ['resize width +64']
-esc = [
-  'mode main',
-]
-enter = [
-  'mode main',
-]
+esc = ['mode main']
+enter = ['mode main']
 
 [mode.join.binding]
 h = ['join-with left', 'mode main']
@@ -421,12 +402,8 @@ k = ['join-with up', 'mode main']
 l = ['join-with right', 'mode main']
 cmd-h = ['join-with left', 'mode main']
 cmd-alt-h = ['join-with left', 'mode main']
-esc = [
-  'mode main',
-]
-enter = [
-  'mode main',
-]
+esc = ['mode main']
+enter = ['mode main']
 
 [[on-window-detected]]
 if.app-id = 'org.qutebrowser.qutebrowser'
@@ -438,6 +415,4 @@ run = ['layout tiling', 'move-node-to-workspace 1']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
-run = [
-'layout floating'
-]
+run = ['layout floating']

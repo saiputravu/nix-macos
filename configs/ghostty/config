@@ -42,7 +42,7 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 macos-titlebar-style = hidden
-theme = rose-pine
+# theme = rose-pine
 quit-after-last-window-closed = true
 quick-terminal-animation-duration = 1
 window-padding-x = 10
