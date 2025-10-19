@@ -125,5 +125,15 @@ function zathura-web {
   zathura --fork $FILE 2>&1 > /dev/null && sleep 0.5 && rm -f $FILE
 }
 
+function sioyek-web {
+  if [[ $# -ne 1 ]]; then 
+    echo -e 'Usage: zathura-web <URL>'
+    return
+  fi 
+  FILE="/tmp/out.pdf"
+  curl "$1" -s --output $FILE
+  sioyek --new-window $FILE 2>&1 > /dev/null && sleep 0.5 && rm -f $FILE
+}
+
 # Opam settings
 [[ ! -r '/Users/sai/.opam/opam-init/init.zsh' ]] || source '/Users/sai/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null

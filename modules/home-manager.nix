@@ -104,6 +104,10 @@ let saiHomeConfig = {
         source = ../configs/zathura;
         recursive = true;
       };
+      ".config/sioyek" = {
+        source = ../configs/sioyek;
+        recursive = true;
+      };
     };
 
     # activation.forceSpicetifyReapply = lib.hm.dag.entryAfter ["writeBoundary"] ''
