@@ -46,6 +46,7 @@ let saiHomeConfig = {
 
       # spicetify-cli
 
+      google-cloud-sdk
       colima
       docker
       vscode
@@ -63,6 +64,9 @@ let saiHomeConfig = {
 
       # Git
       delta
+
+      # Python deps
+      uv
 
       # Ocaml deps
       ocaml
@@ -106,6 +110,10 @@ let saiHomeConfig = {
       };
       ".config/sioyek" = {
         source = ../configs/sioyek;
+        recursive = true;
+      };
+      ".config/zellij" = {
+        source = ../configs/zellij;
         recursive = true;
       };
     };

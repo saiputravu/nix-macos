@@ -15,6 +15,7 @@
       vim
       neovim
       tmux
+      zellij
       go
       tree-sitter
       nodejs_24
@@ -53,6 +54,7 @@
       "spotify"
       "Sikarugir-App/sikarugir/sikarugir"
       "porting-kit"
+      "windows-app"
     ];
   };
 

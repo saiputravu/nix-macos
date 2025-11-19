@@ -130,9 +130,9 @@ function sioyek-web {
     echo -e 'Usage: zathura-web <URL>'
     return
   fi 
-  FILE="/tmp/out.pdf"
+  FILE="/tmp/$(echo "$1" | md5sum -z | cut -d' ' -f1)"
   curl "$1" -s --output $FILE
-  sioyek --new-window $FILE 2>&1 > /dev/null && sleep 0.5 && rm -f $FILE
+  sioyek --new-window $FILE 2>&1 > /dev/null 
 }
 
 # Opam settings
