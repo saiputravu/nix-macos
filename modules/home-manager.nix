@@ -43,6 +43,7 @@ let saiHomeConfig = {
       sioyek
       obsidian
       ice-bar
+      github-cli
 
       # spicetify-cli
 

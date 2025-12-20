@@ -4,6 +4,14 @@ auto-format = true
 file-types = ["cpp", "h"]
 indent = { tab-width = 2, unit = "\t" }
 
+# [language-server.clangd]
+# command = "clangd"
+# args = ["--query-driver=/nix/store/**/*", "--header-insertion=never"]
+
+[[language]]
+name = "go"
+auto-format = true
+
 [[language]]
 name = "ocaml"
 auto-format = true

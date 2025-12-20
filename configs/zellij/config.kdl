@@ -260,7 +260,7 @@ web_client {
 // Choose the theme that is specified in the themes section.
 // Default: default
 // 
-theme "ayu_dark"
+theme "iceberg-dark"
  
 // Choose the base input mode of zellij.
 // Default: normal
@@ -361,7 +361,8 @@ copy_clipboard "primary"
  
 // Path to the default editor to use to edit pane scrollbuffer
 // Default: $EDITOR or $VISUAL
-scrollback_editor "/nix/profiles/putravu/default/bin/nvim"
+// scrollback_editor "/usr/bin/vim"
+scrollback_editor "hx"
  
 // A fixed name to always give the Zellij session.
 // Consider also setting `attach_to_session true,`
