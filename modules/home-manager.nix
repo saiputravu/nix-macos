@@ -60,6 +60,12 @@ let saiHomeConfig = {
       rust-analyzer
       rustPackages.clippy
 
+      # Golang deps
+      gopls
+      go
+      golangci-lint
+      golangci-lint-langserver
+
       # Editors
       helix
 
