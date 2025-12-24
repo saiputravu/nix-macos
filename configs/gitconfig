@@ -2,7 +2,7 @@
 	email = aputravu1234@gmail.com
 	name = sai
 [core]
-	editor = nvim
+	editor = hx
 	pager = delta
 
 [interactive]

@@ -65,6 +65,8 @@ let saiHomeConfig = {
       go
       golangci-lint
       golangci-lint-langserver
+      protobuf
+      protoc-gen-go
 
       # Editors
       helix
