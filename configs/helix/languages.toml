@@ -1,12 +1,12 @@
 [[language]]
 name = "cpp"
 auto-format = true
-file-types = ["cpp", "h"]
+file-types = ["cpp", "h", "metal"]
 indent = { tab-width = 2, unit = "\t" }
 
-# [language-server.clangd]
-# command = "clangd"
-# args = ["--query-driver=/nix/store/**/*", "--header-insertion=never"]
+[language-server.clangd]
+command = "clangd"
+args = ["--query-driver=/nix/store/**/*", "--header-insertion=never"]
 
 [[language]]
 name = "go"

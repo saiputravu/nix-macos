@@ -59,6 +59,3 @@ g = { a = "code_action" }
 "." = ":toggle-option lsp.display-inlay-hints"
 q = ":buffer-close"
 l = ":sh git log -n 5 --no-patch -L%{cursor_line},+1:%{buffer_name}"
-
-[keys.insert]
-j = { k = "normal_mode" }

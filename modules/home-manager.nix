@@ -23,7 +23,6 @@ let saiHomeConfig = {
 
   home = 
   let steam-package = pkgs.callPackage ./steam.nix {}; in
-  let protonvpn-package = pkgs.callPackage ./protonvpn.nix {}; in
   {
     stateVersion = "23.05";
 
@@ -35,8 +34,6 @@ let saiHomeConfig = {
       # $ nix-env -qaP | grep wget
 
       # General GUI apps
-      google-chrome
-      firefox-unwrapped
       anki-bin
       discord
       zathura
@@ -44,6 +41,19 @@ let saiHomeConfig = {
       obsidian
       ice-bar
       github-cli
+      pkgs.git-xet
+      marksman
+      dprint
+
+      # ai
+      inputs.claude-code-nix.packages.${pkgs.system}.default
+      ngrok
+
+      # SQL
+      postgresql
+
+      # inotify
+      fswatch
 
       # spicetify-cli
 
@@ -70,6 +80,7 @@ let saiHomeConfig = {
 
       # Editors
       helix
+      tectonic
 
       # Git
       delta
@@ -92,7 +103,6 @@ let saiHomeConfig = {
 
       # Gaming deps
       steam-package
-      protonvpn-package
       undmg # Testing any issues with DMG installs.
     ];
 
@@ -166,9 +176,11 @@ let saiHomeConfig = {
     };
     git = {
       enable = true;
-      userName = "${username}";
       ignores = [".DS_STORE"];
-      extraConfig = {
+      lfs.enable = true;
+      signing.format = "openpgp";
+      settings = {
+        user.name = "${username}";
         init.defaultBranch = "main";
         push.autoSetupRemote = true;
       };

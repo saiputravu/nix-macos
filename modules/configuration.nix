@@ -23,7 +23,7 @@
       ripgrep
       nixd
       deadnix
-      neofetch
+      fastfetch
       btop
       htop
       tree
@@ -33,12 +33,17 @@
 
   homebrew = {
     enable = true;
-    # onActivation.cleanup = "uninstall";
+    onActivation.cleanup = "uninstall";
+    onActivation = {
+      upgrade = true;
+    };
     taps = ["FelixKratz/formulae"];
     brews = [
       "borders"
     ];
     casks = [
+      "protonvpn"
+      "claude"
       "tailscale-app"
       "ghostty"
       "mac-mouse-fix"
@@ -52,7 +57,6 @@
       "arc"
       "zen"
       "spotify"
-      "Sikarugir-App/sikarugir/sikarugir"
       "porting-kit"
       "windows-app"
     ];
@@ -92,6 +96,8 @@
         # pkgs.nerd-fonts.JetBrainsMono
         pkgs.nerd-fonts._0xproto
         pkgs.nerd-fonts.droid-sans-mono
+        pkgs.nerd-fonts.roboto-mono
+        pkgs.roboto
     ];
   };
 
