@@ -7,7 +7,14 @@ import subprocess
 SESSIONS_FILE = os.path.expanduser("~/.sioyek_claude_sessions.json")
 
 def clean_path(path):
-    return path.strip().strip("'")
+    path = path.strip().strip("'\"")
+    if not os.path.exists(path):
+        dirname, basename = os.path.split(path)
+        if basename.startswith('.') and basename.endswith('-wrapped'):
+            unwrapped = os.path.join(dirname, basename[1:].removesuffix('-wrapped'))
+            if os.path.exists(unwrapped):
+                return unwrapped
+    return path
 
 def set_status(sioyek_path, message):
     subprocess.run([sioyek_path, "--execute-command", f"set_status_string {message}"],
