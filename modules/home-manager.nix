@@ -15,7 +15,17 @@ let saiHomeConfig = {
   username,
   homedir,
   ...
-}: {
+}:
+let
+  claudePkg = inputs.claude-code-nix.packages.${pkgs.system}.default;
+  pythonEnv = pkgs.python3.withPackages (ps: with ps; [ sioyek ]);
+  sioyekScriptStore = pkgs.writeText "sioyek_claude_session.py"
+    (builtins.readFile ../configs/sioyek/sioyek_claude_session.py);
+  sioyekClaude = pkgs.writeShellScriptBin "sioyek-claude-session" ''
+    export PATH="${claudePkg}/bin:$PATH"
+    exec ${pythonEnv}/bin/python3 ${sioyekScriptStore} "$@"
+  '';
+in {
 
   imports = [
       # inputs.spicetify-nix.homeManagerModules.default
@@ -87,6 +97,11 @@ let saiHomeConfig = {
 
       # Python deps
       uv
+      python3Packages.jedi-language-server
+      python3Packages.jedi
+      python3Packages.anthropic
+      python3Packages.sioyek
+      sioyekClaude
 
       # Ocaml deps
       ocaml
@@ -127,10 +142,10 @@ let saiHomeConfig = {
         source = ../configs/zathura;
         recursive = true;
       };
-      ".config/sioyek" = {
-        source = ../configs/sioyek;
-        recursive = true;
-      };
+      ".config/sioyek/keys_user.config".source = ../configs/sioyek/keys_user.config;
+      ".config/sioyek/prefs_user.config".text =
+        (builtins.readFile ../configs/sioyek/prefs_user.config) +
+        "new_command _claude4_session ${sioyekClaude}/bin/sioyek-claude-session \"%{sioyek_path}\" \"%{selected_text}\" \"%{document_path}\"\n";
       ".config/zellij" = {
         source = ../configs/zellij;
         recursive = true;
