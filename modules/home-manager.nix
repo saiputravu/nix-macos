@@ -21,10 +21,12 @@ let
   sioyekPy = pkgs.python3Packages.buildPythonPackage rec {
     pname = "sioyek";
     version = "0.31.11";
+    pyproject = true;
     src = pkgs.fetchPypi {
       inherit pname version;
       sha256 = "1qsbpnmr5jyla77wbs7hrpxvcp5sr36rxbb49wmwsls2dlmz0fib";
     };
+    build-system = [ pkgs.python3Packages.setuptools ];
     doCheck = false;
   };
   pythonEnv = pkgs.python3.withPackages (_: [ sioyekPy ]);
