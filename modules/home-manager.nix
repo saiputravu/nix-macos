@@ -18,7 +18,16 @@ let saiHomeConfig = {
 }:
 let
   claudePkg = inputs.claude-code-nix.packages.${pkgs.system}.default;
-  pythonEnv = pkgs.python3.withPackages (ps: with ps; [ sioyek ]);
+  sioyekPy = pkgs.python3Packages.buildPythonPackage rec {
+    pname = "sioyek";
+    version = "0.31.11";
+    src = pkgs.fetchPypi {
+      inherit pname version;
+      sha256 = "1qsbpnmr5jyla77wbs7hrpxvcp5sr36rxbb49wmwsls2dlmz0fib";
+    };
+    doCheck = false;
+  };
+  pythonEnv = pkgs.python3.withPackages (_: [ sioyekPy ]);
   sioyekScriptStore = pkgs.writeText "sioyek_claude_session.py"
     (builtins.readFile ../configs/sioyek/sioyek_claude_session.py);
   sioyekClaude = pkgs.writeShellScriptBin "sioyek-claude-session" ''
@@ -100,7 +109,6 @@ in {
       python3Packages.jedi-language-server
       python3Packages.jedi
       python3Packages.anthropic
-      python3Packages.sioyek
       sioyekClaude
 
       # Ocaml deps
