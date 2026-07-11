@@ -18,23 +18,11 @@ let saiHomeConfig = {
 }:
 let
   claudePkg = inputs.claude-code-nix.packages.${pkgs.system}.default;
-  sioyekPy = pkgs.python3Packages.buildPythonPackage rec {
-    pname = "sioyek";
-    version = "0.31.11";
-    pyproject = true;
-    src = pkgs.fetchPypi {
-      inherit pname version;
-      sha256 = "1qsbpnmr5jyla77wbs7hrpxvcp5sr36rxbb49wmwsls2dlmz0fib";
-    };
-    build-system = [ pkgs.python3Packages.setuptools ];
-    doCheck = false;
-  };
-  pythonEnv = pkgs.python3.withPackages (_: [ sioyekPy ]);
   sioyekScriptStore = pkgs.writeText "sioyek_claude_session.py"
     (builtins.readFile ../configs/sioyek/sioyek_claude_session.py);
   sioyekClaude = pkgs.writeShellScriptBin "sioyek-claude-session" ''
     export PATH="${claudePkg}/bin:$PATH"
-    exec ${pythonEnv}/bin/python3 ${sioyekScriptStore} "$@"
+    exec ${pkgs.python3}/bin/python3 ${sioyekScriptStore} "$@"
   '';
 in {
 

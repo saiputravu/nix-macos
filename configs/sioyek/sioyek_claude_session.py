@@ -3,9 +3,15 @@ import os
 import json
 import hashlib
 import subprocess
-from sioyek import Sioyek, clean_path
 
 SESSIONS_FILE = os.path.expanduser("~/.sioyek_claude_sessions.json")
+
+def clean_path(path):
+    return path.strip().strip("'")
+
+def set_status(sioyek_path, message):
+    subprocess.run([sioyek_path, "--execute-command", f"set_status_string {message}"],
+                   capture_output=True)
 
 def get_pdf_hash(file_path):
     return hashlib.md5(file_path.encode('utf-8')).hexdigest()
@@ -25,8 +31,7 @@ def main():
     selected_text = sys.argv[2]
     document_path = sys.argv[3]
 
-    sioyek = Sioyek(sioyek_path)
-    sioyek.set_status_string("Contacting Claude...")
+    set_status(sioyek_path, "Contacting Claude...")
 
     pdf_id = get_pdf_hash(document_path)
     sessions = load_sessions()
@@ -56,7 +61,7 @@ def main():
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
         if result.returncode != 0:
-            sioyek.set_status_string(f"Error: {result.stderr.strip()[:120]}")
+            set_status(sioyek_path, f"Error: {result.stderr.strip()[:120]}")
             return
 
         data = json.loads(result.stdout)
@@ -67,16 +72,16 @@ def main():
             sessions[pdf_id] = session_id
             save_sessions(sessions)
 
-        sioyek.set_status_string(f"Claude: {response_text}")
+        set_status(sioyek_path, f"Claude: {response_text}")
 
     except subprocess.TimeoutExpired:
-        sioyek.set_status_string("Timed out after 120s")
+        set_status(sioyek_path, "Timed out after 120s")
     except json.JSONDecodeError:
-        sioyek.set_status_string("Error: could not parse Claude output")
+        set_status(sioyek_path, "Error: could not parse Claude output")
     except FileNotFoundError:
-        sioyek.set_status_string("Error: 'claude' not found in PATH")
+        set_status(sioyek_path, "Error: 'claude' not found in PATH")
     except Exception as e:
-        sioyek.set_status_string(f"Error: {str(e)[:100]}")
+        set_status(sioyek_path, f"Error: {str(e)[:100]}")
 
 if __name__ == '__main__':
     main()
