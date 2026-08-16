@@ -47,18 +47,13 @@
       "tailscale-app"
       "ghostty"
       "mac-mouse-fix"
-      "orion"
       "folx"
-      "gimp"
       "citrix-workspace"
       "webex"
       "altserver"
       "utm"
       "arc"
-      "zen"
       "spotify"
-      "porting-kit"
-      "windows-app"
     ];
   };
 

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(nix search *)",
+      "Bash(pip show *)",
+      "Bash(python3 -c \"import sioyek; print\\(sioyek.__file__\\)\")",
+      "Bash(pip3 index *)",
+      "Bash(curl -s https://pypi.org/pypi/sioyek/json)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(list\\(d['releases'].keys\\(\\)\\)[-3:]\\)\")"
+    ]
+  }
+}

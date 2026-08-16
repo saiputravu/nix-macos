@@ -112,7 +112,7 @@ in {
       bear
 
       # Minecraft deps
-      prismlauncher
+      # prismlauncher
 
       # Gaming deps
       steam-package
@@ -128,6 +128,10 @@ in {
       ".gitconfig".source = ../configs/gitconfig;
       ".config/helix/config.toml".source = ../configs/helix/config.toml;
       ".config/helix/languages.toml".source = ../configs/helix/languages.toml;
+      # NOTE: rust-analyzer only reads this path when XDG_CONFIG_HOME is set.
+      # Unset, it probes ~/Library/Application Support/rust-analyzer/ instead.
+      ".config/rust-analyzer/rust-analyzer.toml".source =
+        ../configs/rust-analyzer/rust-analyzer.toml;
       ".config/ghostty" = {
         source = ../configs/ghostty;
         recursive = true;
