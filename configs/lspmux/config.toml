@@ -1,0 +1,4 @@
+# The whole point of running lspmux is that a rust-analyzer instance outlives the editor that
+# started it. The default here is 300 seconds, which drops the instance five minutes after the
+# last helix window closes -- and then the next open pays the full re-index again.
+instance_timeout = false

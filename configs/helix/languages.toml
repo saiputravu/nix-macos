@@ -18,10 +18,24 @@ auto-format = true
 formatter = { command = "ocamlformat %{buffer_name}" }
 file-types = ["ml", "mli"]
 
+# Talks to the `lspmux server` daemon instead of spawning rust-analyzer directly, so the index
+# survives closing helix. rust-analyzer has no on-disk cache: every start re-analyses the whole
+# dependency tree in RAM, which is ~4.5 minutes on a burn/wgpu-sized crate.
+#
+# There is no auto-spawn -- if the daemon is not running this fails with "Connection refused".
+# Start it from inside the project's dev shell so the rust-analyzer it spawns inherits the build
+# environment (aifsv2 needs pkg-config + proj on PATH for proj-sys' build script):
+#
+#   nix develop -c lspmux server
+[language-server.lspmux-rust]
+command = "lspmux"
+args = ["client", "--server-path", "rust-analyzer"]
+
 [[language]]
 name = "rust"
 auto-format = true
 formatter = { command = "rustfmt", args = ["--edition", "2024"] }
+language-servers = ["lspmux-rust"]
 
 [[language]]
 name = "markdown"

@@ -78,6 +78,10 @@ in {
       rustfmt
       rust-analyzer
       rustPackages.clippy
+      # Proxy that holds one rust-analyzer per workspace, so closing helix does not throw away
+      # the index. rust-analyzer has no on-disk cache and re-analyses all ~700 crate roots from
+      # scratch on every start -- ~4.5 minutes on aifsv2. Needs `lspmux server` running.
+      lspmux
 
       # Golang deps
       gopls
@@ -132,6 +136,7 @@ in {
       # Unset, it probes ~/Library/Application Support/rust-analyzer/ instead.
       ".config/rust-analyzer/rust-analyzer.toml".source =
         ../configs/rust-analyzer/rust-analyzer.toml;
+      ".config/lspmux/config.toml".source = ../configs/lspmux/config.toml;
       ".config/ghostty" = {
         source = ../configs/ghostty;
         recursive = true;
