@@ -37,10 +37,6 @@
     onActivation = {
       upgrade = true;
     };
-    taps = ["FelixKratz/formulae"];
-    brews = [
-      "borders"
-    ];
     casks = [
       "protonvpn"
       "claude"

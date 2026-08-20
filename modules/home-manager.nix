@@ -90,6 +90,7 @@ in {
       golangci-lint-langserver
       protobuf
       protoc-gen-go
+      just
 
       # Editors
       helix
