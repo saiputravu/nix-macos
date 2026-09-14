@@ -49,7 +49,7 @@ window-padding-x = 10
 window-padding-y = 10
 #window-padding-color = extend
 #window-padding-balance = true
-background-opacity = 0.75
+background-opacity = 0.85
 #window-padding-balance = false
 
 
