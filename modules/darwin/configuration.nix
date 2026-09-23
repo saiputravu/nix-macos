@@ -15,7 +15,7 @@
       vim
       neovim
       tmux
-      zellij
+      # NOTE: zellij lives in modules/common/home.nix
       go
       tree-sitter
       nodejs_24
@@ -63,7 +63,7 @@
   services = {
     aerospace = {
       enable = true;
-      settings = pkgs.lib.importTOML ../configs/aerospace/aerospace.toml;
+      settings = pkgs.lib.importTOML ../../configs/aerospace/aerospace.toml;
     };
   };
 

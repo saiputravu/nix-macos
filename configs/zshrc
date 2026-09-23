@@ -11,7 +11,11 @@ zstyle ':z4h:' auto-update      'no'
 zstyle ':z4h:' auto-update-days '28'
 
 # Keyboard type: 'mac' or 'pc'.
-zstyle ':z4h:bindkey' keyboard  'mac'
+if [[ $OSTYPE == darwin* ]]; then
+  zstyle ':z4h:bindkey' keyboard  'mac'
+else
+  zstyle ':z4h:bindkey' keyboard  'pc'
+fi
 
 # Don't start tmux.
 zstyle ':z4h:' start-tmux       no
@@ -99,7 +103,18 @@ alias ls="${aliases[ls]:-ls} -A"
 setopt glob_dots     # no special treatment for file names with a leading dot
 setopt no_auto_menu  # require an extra TAB press to open the completion menu
 
-alias rebuild='sudo darwin-rebuild switch --flake ~/.config/nix-darwin-config/'
+# Locate this flake, whatever it got cloned as on this host.
+for _d in ~/.config/nix-darwin-config ~/.config/nix-config ~/.config/nix; do
+  [[ -f $_d/flake.nix ]] && export NIX_CONFIG_DIR=$_d && break
+done
+unset _d
+
+if [[ $OSTYPE == darwin* ]]; then
+  alias rebuild='sudo darwin-rebuild switch --flake ${NIX_CONFIG_DIR:-~/.config/nix-darwin-config}#$(hostname -s)'
+else
+  alias rebuild='home-manager switch -b backup --flake ${NIX_CONFIG_DIR:-~/.config/nix-config}#$USER@$(hostname -s)'
+fi
+
 alias vim=nvim
 alias gs='git status'
 alias gl='git log'
@@ -113,7 +128,7 @@ alias gr='git rebase'
 function gri() { git rebase -i HEAD~$1 }
 alias ga='git add'
 
-alias cdconf='cd ~/.config/nix-darwin-config/'
+alias cdconf='cd ${NIX_CONFIG_DIR:-~/.config/nix-darwin-config}'
 
 function zathura-web {
   if [[ $# -ne 1 ]]; then 
@@ -136,4 +151,4 @@ function sioyek-web {
 }
 
 # Opam settings
-[[ ! -r '/Users/sai/.opam/opam-init/init.zsh' ]] || source '/Users/sai/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
+[[ ! -r "$HOME/.opam/opam-init/init.zsh" ]] || source "$HOME/.opam/opam-init/init.zsh" > /dev/null 2> /dev/null

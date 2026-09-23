@@ -1,3 +1,4 @@
+# macOS-only home-manager config. Pairs with modules/common/home.nix.
 {
   config,
   pkgs,
@@ -7,19 +8,10 @@
   inputs,
   ...
 }:
-let saiHomeConfig = {
-  pkgs,
-  lib,
-  config,
-  inputs,
-  username,
-  homedir,
-  ...
-}:
 let
   claudePkg = inputs.claude-code-nix.packages.${pkgs.system}.default;
   sioyekScriptStore = pkgs.writeText "sioyek_claude_session.py"
-    (builtins.readFile ../configs/sioyek/sioyek_claude_session.py);
+    (builtins.readFile ../../configs/sioyek/sioyek_claude_session.py);
   sioyekClaude = pkgs.writeShellScriptBin "sioyek-claude-session" ''
     export PATH="${claudePkg}/bin:$PATH"
     exec ${pkgs.python3}/bin/python3 ${sioyekScriptStore} "$@"
@@ -30,14 +22,9 @@ in {
       # inputs.spicetify-nix.homeManagerModules.default
   ];
 
-  home = 
+  home =
   let steam-package = pkgs.callPackage ./steam.nix {}; in
   {
-    stateVersion = "23.05";
-
-    username = username;
-    homeDirectory = homedir;
-
     packages = with pkgs; [
       # Local apps
       # $ nix-env -qaP | grep wget
@@ -93,11 +80,11 @@ in {
       just
 
       # Editors
-      helix
+      # NOTE: helix lives in modules/common/home.nix
       tectonic
 
       # Git
-      delta
+      # NOTE: delta lives in modules/common/home.nix
 
       # Python deps
       uv
@@ -129,35 +116,27 @@ in {
     };
 
     file = {
-      ".zshrc".source = ../configs/zshrc;
-      ".gitconfig".source = ../configs/gitconfig;
-      ".config/helix/config.toml".source = ../configs/helix/config.toml;
-      ".config/helix/languages.toml".source = ../configs/helix/languages.toml;
       # NOTE: rust-analyzer only reads this path when XDG_CONFIG_HOME is set.
       # Unset, it probes ~/Library/Application Support/rust-analyzer/ instead.
       ".config/rust-analyzer/rust-analyzer.toml".source =
-        ../configs/rust-analyzer/rust-analyzer.toml;
-      ".config/lspmux/config.toml".source = ../configs/lspmux/config.toml;
+        ../../configs/rust-analyzer/rust-analyzer.toml;
+      ".config/lspmux/config.toml".source = ../../configs/lspmux/config.toml;
       ".config/ghostty" = {
-        source = ../configs/ghostty;
+        source = ../../configs/ghostty;
         recursive = true;
       };
       ".config/aerospace" = {
-        source = ../configs/aerospace;
+        source = ../../configs/aerospace;
         recursive = true;
       };
       ".config/zathura" = {
-        source = ../configs/zathura;
+        source = ../../configs/zathura;
         recursive = true;
       };
-      ".config/sioyek/keys_user.config".source = ../configs/sioyek/keys_user.config;
+      ".config/sioyek/keys_user.config".source = ../../configs/sioyek/keys_user.config;
       ".config/sioyek/prefs_user.config".text =
-        (builtins.readFile ../configs/sioyek/prefs_user.config) +
+        (builtins.readFile ../../configs/sioyek/prefs_user.config) +
         "new_command _claude4_session ${sioyekClaude}/bin/sioyek-claude-session \"%{sioyek_path}\" \"%{selected_text}\" \"%{document_path}\"\n";
-      ".config/zellij" = {
-        source = ../configs/zellij;
-        recursive = true;
-      };
     };
 
     # activation.forceSpicetifyReapply = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -191,58 +170,17 @@ in {
     # '';
   };
 
-
-  programs = {
-    htop = {
-      enable = true;
-      settings.show_program_path = true;
-    };
-    git = {
-      enable = true;
-      ignores = [".DS_STORE"];
-      lfs.enable = true;
-      signing.format = "openpgp";
-      settings = {
-        user.name = "${username}";
-        init.defaultBranch = "main";
-        push.autoSetupRemote = true;
-      };
-    };
-    # spicetify =
-    # let 
-    #   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
-    # in
-    # {
-    #   enable = true;
-    #   theme = spicePkgs.themes.defaultDynamic;
-    #   # colorScheme = "red-dark";
-    #   enabledExtensions = with spicePkgs.extensions; [
-    #     keyboardShortcut
-    #     shuffle
-    #   ];
-    # };
-    tmux = {
-      enable = true;
-      extraConfig = builtins.readFile ../configs/tmux.conf;
-    };
-
-    home-manager = {
-        enable = true;
-    };
-  };
-};
-in
-{
-  imports = [
-    inputs.home-manager.darwinModules.home-manager
-  ];
-
-  home-manager = {
-    extraSpecialArgs = { inherit username homedir inputs; };
-
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    users.sai = saiHomeConfig;
-    backupFileExtension = "hm-backup";
-  };
+  # programs.spicetify =
+  # let
+  #   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+  # in
+  # {
+  #   enable = true;
+  #   theme = spicePkgs.themes.defaultDynamic;
+  #   # colorScheme = "red-dark";
+  #   enabledExtensions = with spicePkgs.extensions; [
+  #     keyboardShortcut
+  #     shuffle
+  #   ];
+  # };
 }

@@ -1,5 +1,5 @@
 {
-  description = "Nix-darwin system flake";
+  description = "Personal nix config: macOS (nix-darwin) + Debian (standalone home-manager)";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -26,11 +26,25 @@
     claude-code-nix,
     # spicetify-nix
   }:
-  let hostname = "mahi"; in
-  let username = "sai"; in
-  let homedir = "/Users/sai"; in
   let
-    pkgs-stable = nixpkgs-stable.legacyPackages.aarch64-darwin;
+    hosts = {
+      # macOS laptop, managed by nix-darwin (system + home).
+      mahi = {
+        system = "aarch64-darwin";
+        username = "sai";
+        homedir = "/Users/sai";
+      };
+      # Debian 13 trixie, managed by standalone home-manager ($HOME only).
+      maui = {
+        system = "x86_64-linux";
+        username = "sai";
+        homedir = "/home/sai";
+      };
+    };
+  in
+  let
+    # Darwin-only: used by the zathura pin below. Do not reference from anything shared.
+    pkgs-stable = nixpkgs-stable.legacyPackages.${hosts.mahi.system};
   in
   let
     configuration = { pkgs, ... }: {
@@ -46,11 +60,11 @@
       system.stateVersion = 6;
 
       # The platform the configuration will be used on.
-      nixpkgs.hostPlatform = "aarch64-darwin";
-      
-      users.users.sai = {
-        name = username;
-        home = homedir;
+      nixpkgs.hostPlatform = hosts.mahi.system;
+
+      users.users.${hosts.mahi.username} = {
+        name = hosts.mahi.username;
+        home = hosts.mahi.homedir;
       };
 
       nixpkgs.overlays = [
@@ -65,15 +79,36 @@
     };
   in
   {
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#simple
-    darwinConfigurations."${hostname}" = nix-darwin.lib.darwinSystem {
-      specialArgs = { inherit username homedir inputs; };
+    # macOS:
+    # $ sudo darwin-rebuild switch --flake .#mahi
+    darwinConfigurations.mahi = nix-darwin.lib.darwinSystem {
+      specialArgs = {
+        inherit inputs;
+        inherit (hosts.mahi) username homedir;
+      };
       modules = [
           configuration
-          ./modules/configuration.nix
-          ./modules/home-manager.nix
+          ./modules/darwin/configuration.nix
+          ./modules/darwin/home-manager.nix
         ];
+    };
+
+    # Debian (non-NixOS, so home-manager runs standalone):
+    # $ home-manager switch -b backup --flake .#sai@maui
+    homeConfigurations."${hosts.maui.username}@maui" = home-manager.lib.homeManagerConfiguration {
+      # No useGlobalPkgs here, so allowUnfree has to be set on this pkgs instance.
+      pkgs = import nixpkgs {
+        inherit (hosts.maui) system;
+        config.allowUnfree = true;
+      };
+      extraSpecialArgs = {
+        inherit inputs;
+        inherit (hosts.maui) username homedir;
+      };
+      modules = [
+        ./modules/common/home.nix
+        ./modules/linux/home.nix
+      ];
     };
   };
 }
