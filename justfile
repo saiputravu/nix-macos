@@ -88,6 +88,9 @@ check:
     @echo "-> sai@maui (x86_64-linux)"
     @nix eval --raw '{{ flake }}#homeConfigurations."sai@maui".activationPackage.drvPath'
     @echo
+    @echo "-> root@noble2 (x86_64-linux)"
+    @nix eval --raw '{{ flake }}#homeConfigurations."root@noble2".activationPackage.drvPath'
+    @echo
 
 # List generations for this host.
 [group('check')]

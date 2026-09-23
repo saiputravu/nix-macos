@@ -1,14 +1,15 @@
 # nix config
 
-Personal Nix configuration for two machines:
+Personal Nix configuration for three machines:
 
-| host   | OS                     | managed by                          | scope         |
-| ------ | ---------------------- | ----------------------------------- | ------------- |
-| `mahi` | macOS (aarch64-darwin) | nix-darwin + home-manager module    | system + home |
-| `maui` | Debian 13 trixie (x86_64-linux) | standalone home-manager    | `$HOME` only  |
+| host      | OS                     | managed by                          | scope         |
+| --------- | ---------------------- | ----------------------------------- | ------------- |
+| `mahi`    | macOS (aarch64-darwin) | nix-darwin + home-manager module    | system + home |
+| `maui`    | Debian 13 trixie (x86_64-linux) | standalone home-manager    | `$HOME` only  |
+| `noble2`  | VPS (x86_64-linux), root account | standalone home-manager | `$HOME` only  |
 
-Debian isn't NixOS, so there is no system-level Nix config for `maui` — packages like `zsh`,
-`curl` and `build-essential` stay apt's job.
+Debian/Ubuntu aren't NixOS, so there is no system-level Nix config for `maui`/`noble2` — packages
+like `zsh`, `curl` and `build-essential` stay apt's job.
 
 ## Layout
 
@@ -41,7 +42,7 @@ just switch       # apply this host's config
 just dry          # build + diff against what's live, without applying
 just plan         # resolve the build plan; builds and downloads nothing
 just build        # build only, leaves ./result
-just check        # evaluate BOTH hosts (catches module errors with no builder needed)
+just check        # evaluate all hosts (catches module errors with no builder needed)
 just generations  # list generations
 just rollback     # back to the previous generation
 just update       # update all flake inputs
@@ -90,11 +91,34 @@ rebuild
 `$XDG_CONFIG_HOME/nix/` is where Nix itself looks for `nix.conf`. Either works — `cdconf`/`rebuild`
 probe for `~/.config/nix-darwin-config`, `~/.config/nix-config` and `~/.config/nix` in that order.
 
+## noble2 (VPS, root)
+
+`just` derives the flake target from `hostname -s`, so the box's hostname must actually be
+`noble2` (`hostnamectl set-hostname noble2`) before `just switch`/`just bootstrap-linux` will
+resolve. One-time setup, run as `root`:
+
+```bash
+apt install -y zsh git curl
+chsh -s /usr/bin/zsh
+git clone git@github.com:saiputravu/nix-macos.git ~/.config/nix-config
+cd ~/.config/nix-config
+nix run nixpkgs#just -- bootstrap-linux     # or the raw command below
+nix run home-manager/master -- switch -b backup --flake ~/.config/nix-config#root@noble2
+```
+
+After the first activation:
+
+```bash
+just switch
+# equivalently:
+home-manager switch -b backup --flake ~/.config/nix-config#root@noble2
+```
+
 ## Known sharp edges
 
 - `home.file.".gitconfig"` and `programs.git` both exist. Git reads `~/.gitconfig` and ignores
   `~/.config/git/config` when it's present, so the `programs.git.settings` block
-  (`init.defaultBranch`, `push.autoSetupRemote`, lfs) currently has no effect on either host.
+  (`init.defaultBranch`, `push.autoSetupRemote`, lfs) currently has no effect on any host.
 - `configs/helix/languages.toml` references `lspmux`, `rustfmt`, `dprint` and `clangd`, none of
-  which are installed on `maui` — helix will just report no LSP for those languages.
-- `configs/tmux.conf` pipes copy-mode to `xclip`, which isn't installed on either host.
+  which are installed on `maui`/`noble2` — helix will just report no LSP for those languages.
+- `configs/tmux.conf` pipes copy-mode to `xclip`, which isn't installed on any host.
