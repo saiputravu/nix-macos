@@ -115,6 +115,10 @@ if [[ $OSTYPE == darwin* ]]; then
   alias rebuild='sudo darwin-rebuild switch --flake ${NIX_CONFIG_DIR:-~/.config/nix-darwin-config}#$(hostname -s)'
 else
   alias rebuild='home-manager switch -b backup --flake ${NIX_CONFIG_DIR:-~/.config/nix-config}#$USER@$(hostname -s)'
+  cdf() { cd /srv/storage "$@" }
+  cds() { cd /srv/faststorage "$@" }
+  compdef cdf=cd
+  compdef cds=cd
 fi
 
 alias vim=nvim

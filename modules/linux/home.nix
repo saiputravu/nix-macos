@@ -15,6 +15,7 @@
   imports = [
     ./tailscale.nix
     ./sshd.nix
+    ./sudo-ssh-agent-auth.nix
   ];
 
   # Non-NixOS glue: fixes XDG_DATA_DIRS, the locale archive, and .desktop/icon
@@ -30,6 +31,7 @@
     packages = with pkgs; [
       # Shared baseline (helix, zellij, delta) comes from ../common/home.nix.
       ripgrep
+      gh
 
       # ai
       inputs.claude-code-nix.packages.${pkgs.system}.default
