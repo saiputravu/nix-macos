@@ -1,7 +1,5 @@
 # This is the configuration file for Ghostty.
-#
-# This template file has been automatically created at the following
-# path since Ghostty couldn't find any existing config files on your system:
+# This template file has been automatically created at the following path since Ghostty couldn't find any existing config files on your system:
 #
 #   /Users/stefan.pinter/Library/Application Support/com.mitchellh.ghostty/config
 #
@@ -49,7 +47,7 @@ window-padding-x = 10
 window-padding-y = 10
 #window-padding-color = extend
 #window-padding-balance = true
-background-opacity = 0.85
+background-opacity = 0.95
 #window-padding-balance = false
 
 
