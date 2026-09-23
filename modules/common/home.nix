@@ -21,6 +21,7 @@
       helix
       zellij
       delta # configs/gitconfig hardcodes `pager = delta`
+      just # runs the justfile at the repo root
     ];
 
     sessionVariables = {

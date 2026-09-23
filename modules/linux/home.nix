@@ -24,6 +24,9 @@
 
     packages = with pkgs; [
       # Shared baseline (helix, zellij, delta) comes from ../common/home.nix.
+
+      # ai
+      inputs.claude-code-nix.packages.${pkgs.system}.default
     ];
 
     file = {

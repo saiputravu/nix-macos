@@ -77,7 +77,7 @@ in {
       golangci-lint-langserver
       protobuf
       protoc-gen-go
-      just
+      # NOTE: just lives in modules/common/home.nix
 
       # Editors
       # NOTE: helix lives in modules/common/home.nix
