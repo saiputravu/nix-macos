@@ -40,6 +40,11 @@
         username = "sai";
         homedir = "/home/sai";
       };
+      noble2 = {
+        system = "x86_64-linux";
+        username = "root";
+        homedir = "/root";
+      };
     };
   in
   let
@@ -104,6 +109,21 @@
       extraSpecialArgs = {
         inherit inputs;
         inherit (hosts.maui) username homedir;
+      };
+      modules = [
+        ./modules/common/home.nix
+        ./modules/linux/home.nix
+      ];
+    };
+
+    homeConfigurations."${hosts.noble2.username}@noble2" = home-manager.lib.homeManagerConfiguration {
+      pkgs = import nixpkgs {
+        inherit (hosts.noble2) system;
+        config.allowUnfree = true;
+      };
+      extraSpecialArgs = {
+        inherit inputs;
+        inherit (hosts.noble2) username homedir;
       };
       modules = [
         ./modules/common/home.nix
