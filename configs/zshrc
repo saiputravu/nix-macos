@@ -61,6 +61,8 @@ z4h init || return
 
 # Extend PATH.
 path=(~/bin $path)
+path=(~/.nix-profile/bin $path)
+path=(/nix/var/nix/profiles/default/bin $path)
 
 # Export environment variables.
 export GPG_TTY=$TTY

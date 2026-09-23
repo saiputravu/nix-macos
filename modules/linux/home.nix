@@ -12,6 +12,11 @@
   inputs,
   ...
 }: {
+  imports = [
+    ./tailscale.nix
+    ./sshd.nix
+  ];
+
   # Non-NixOS glue: fixes XDG_DATA_DIRS, the locale archive, and .desktop/icon
   # lookup so nix-installed programs behave on Debian.
   targets.genericLinux.enable = true;
@@ -24,6 +29,7 @@
 
     packages = with pkgs; [
       # Shared baseline (helix, zellij, delta) comes from ../common/home.nix.
+      ripgrep
 
       # ai
       inputs.claude-code-nix.packages.${pkgs.system}.default
