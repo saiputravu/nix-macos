@@ -42,8 +42,8 @@
       };
       noble2 = {
         system = "x86_64-linux";
-        username = "root";
-        homedir = "/root";
+        username = "sai";
+        homedir = "/home/sai";
       };
     };
   in
