@@ -113,6 +113,7 @@
       modules = [
         ./modules/common/home.nix
         ./modules/linux/home.nix
+        ./modules/linux/vaultwarden.nix
       ];
     };
 

@@ -48,9 +48,26 @@ dry: build
         2>/dev/null || echo "no existing home-manager generation to diff against"
     fi
 
+# Fetch/renew the Tailscale-issued TLS cert vaultwarden uses (maui only).
+[group('apply')]
+tls-cert:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [[ "$(uname)" != Darwin && "$(hostname -s)" == "maui" ]]; then
+      TAILSCALE="$(command -v tailscale)"
+      DIR=/var/lib/vaultwarden-tls
+      SUFFIX=$("$TAILSCALE" status --json | sed -n 's/.*"MagicDNSSuffix": *"\([^"]*\)".*/\1/p' | head -1)
+      FQDN="$(hostname -s)${SUFFIX:+.$SUFFIX}"
+      sudo mkdir -p "$DIR"
+      sudo "$TAILSCALE" cert --cert-file="$DIR/cert.pem" --key-file="$DIR/key.pem" "$FQDN"
+      sudo chown "$USER":"$USER" "$DIR"/cert.pem "$DIR"/key.pem
+      sudo chmod 644 "$DIR"/cert.pem
+      sudo chmod 600 "$DIR"/key.pem
+    fi
+
 # Apply this host's config.
 [group('apply')]
-switch:
+switch: tls-cert
     #!/usr/bin/env bash
     set -euo pipefail
     if [[ "$(uname)" == Darwin ]]; then

@@ -13,9 +13,11 @@
   ...
 }: {
   imports = [
+    ./nix-daemon.nix
     ./tailscale.nix
     ./sshd.nix
     ./sudo-ssh-agent-auth.nix
+    ./tls-cert.nix
   ];
 
   # Non-NixOS glue: fixes XDG_DATA_DIRS, the locale archive, and .desktop/icon
