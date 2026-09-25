@@ -36,9 +36,18 @@
   dataDir = "${root}/data";
   mediaDir = "${root}/media";
   consumeDir = "${root}/consume";
+  # paperless v3's Tantivy search backend, unlike the old Whoosh one, does not
+  # create its index directory on demand: `document_index reindex` aborts with
+  # ENOENT instead. The NixOS module makes it a tmpfiles rule for the same
+  # reason.
+  indexDir = "${dataDir}/index";
 
   port = 28981;
   servePort = 8444;
+
+  # Ceiling for the classifier's OpenMP threads; see the OMP_NUM_THREADS block
+  # in the runner below for why there is a ceiling at all.
+  maxOmpThreads = 4;
 
   # Outside the store: a secret key world-readable in /nix/store would let
   # anyone on the box forge session cookies.
@@ -81,6 +90,18 @@
     # CSRF/origin checking needs the address the browser actually used.
     ${tailnet.vars}
     PAPERLESS_URL="https://$TS_FQDN:${toString servePort}"
+
+    # Paperless classifies documents with scikit-learn on top of OpenBLAS. The
+    # NixOS module pins OMP_NUM_THREADS=1 unconditionally, because OpenMP
+    # threading makes the classifier spin indefinitely once there are enough
+    # classes -- it never finishes, it just times out (nixpkgs#240591).
+    #
+    # A flat 1 is also a host fact in disguise: it throws away every core on a
+    # box that has them. So read the machine instead, and cap well short of the
+    # thread counts that provoke the pathology. If the classifier ever does
+    # hang, setting maxOmpThreads to 1 is the upstream mitigation.
+    cores="$(${pkgs.coreutils}/bin/nproc 2>/dev/null || echo 1)"
+    OMP_NUM_THREADS="$((cores > ${toString maxOmpThreads} ? ${toString maxOmpThreads} : cores))"
 
     # %t is a unit-file specifier and does not expand in a script; systemd sets
     # XDG_RUNTIME_DIR for user services, which is the same directory and just as
@@ -153,7 +174,7 @@ in {
 
     # /srv/storage is root-owned, so the first switch needs one sudo -- same
     # one-time dance as vaultwarden's /var/lib directory.
-    for dir in '${dataDir}' '${mediaDir}' '${consumeDir}'; do
+    for dir in '${dataDir}' '${indexDir}' '${mediaDir}' '${consumeDir}'; do
       if [ ! -d "$dir" ]; then
         $DRY_RUN_CMD sudo mkdir -p "$dir"
         $DRY_RUN_CMD sudo chown "$USER":"$USER" "$dir"
