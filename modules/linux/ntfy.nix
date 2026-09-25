@@ -92,8 +92,22 @@
         "http://127.0.0.1:${toString port}/$topic" >/dev/null
     '';
   };
+  # ntfy's server-side commands (`user`, `token`, `access`) read the auth file
+  # out of /etc/ntfy/server.yml, which does not exist here -- ours is a store
+  # path. Rather than make every admin command carry `NTFY_AUTH_FILE=...`, wrap
+  # it once. Same binary, same subcommands.
+  ntfyAdmin = pkgs.writeShellApplication {
+    name = "ntfy-admin";
+    text = ''
+      export NTFY_AUTH_FILE="${dataDir}/user.db"
+      # Only so `ntfy-admin access` prints what the server actually enforces;
+      # the running server reads this from server.yml either way.
+      export NTFY_AUTH_DEFAULT_ACCESS="deny-all"
+      exec ${pkgs.ntfy-sh}/bin/ntfy "$@"
+    '';
+  };
 in {
-  home.packages = [pkgs.ntfy-sh notify];
+  home.packages = [pkgs.ntfy-sh notify ntfyAdmin];
 
   home.activation.ntfySetup = lib.hm.dag.entryAfter ["writeBoundary"] ''
     export PATH="/usr/sbin:/usr/bin:/sbin:/bin:$PATH"

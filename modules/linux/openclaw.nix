@@ -89,6 +89,21 @@
     claude
   ];
 
+  openclawAs = pkgs.writeShellApplication {
+    name = "openclaw-as";
+    text = ''
+      if [ $# -eq 0 ]; then
+        echo "usage: openclaw-as <command> [args...]   (e.g. openclaw-as claude auth login)" >&2
+        exit 2
+      fi
+      exec sudo -u ${user} -H env \
+        OPENCLAW_STATE_DIR=${stateDir} \
+        OPENCLAW_CONFIG_PATH=${configFile} \
+        PATH=${toolchain} \
+        "$@"
+    '';
+  };
+
   # Seeded once, then owned by openclaw: `channels add`, `pairing approve` and
   # the Control UI all write back to this file, so it cannot be a store path.
   # Everything below is a starting point, not a managed value.
@@ -139,19 +154,20 @@
     }
   '';
 in {
-  # Talk to the daemon's state as the daemon's user. Every manual step in the
-  # header goes through this; running plain `openclaw` as me would build a
-  # second, unrelated state directory in my home.
+  # Two wrappers, because setup happens as the daemon's user, not as me.
+  #
+  #   openclaw-as <cmd>...   run anything in the daemon's environment
+  #   openclawctl <args>...  openclaw itself, the common case
+  #
+  # Running plain `openclaw` as me would build a second, unrelated state
+  # directory in my home and link WhatsApp to the wrong one. `openclaw-as` is
+  # what logs Claude Code in for this user, whose ~/.claude is under the state
+  # directory rather than mine.
   home.packages = [
+    openclawAs
     (pkgs.writeShellApplication {
       name = "openclawctl";
-      text = ''
-        exec sudo -u ${user} -H env \
-          OPENCLAW_STATE_DIR=${stateDir} \
-          OPENCLAW_CONFIG_PATH=${configFile} \
-          PATH=${toolchain} \
-          ${pkgs.openclaw}/bin/openclaw "$@"
-      '';
+      text = ''exec ${lib.getExe openclawAs} ${pkgs.openclaw}/bin/openclaw "$@"'';
     })
   ];
 

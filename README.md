@@ -29,6 +29,7 @@ modules/
     ├── home.nix               Linux-only home config (maui + noble2)
     ├── tailscale.nix          tailscaled as a system unit
     ├── tls-cert.nix           self-signed cert for services that predate `tailscale serve`
+    ├── claudebox.nix          `claudebox`: Claude Code under systemd sandboxing
     ├── services-maui.nix      imports everything below; maui only
     ├── vaultwarden.nix        password vault          :8222
     ├── blocky.nix             DNS sinkhole for the tailnet (system unit, :53)
@@ -122,27 +123,197 @@ Everything except vaultwarden is published with `tailscale serve`, so the ports 
 host's tailnet name over HTTPS with a cert that renews itself. Timers: `vault-git` (hourly commit
 + push), `vault-ingest` (06:30/18:30), `morning-digest` (07:00).
 
-Manual steps, all one-time and none of them expressible in Nix:
+## Setting the services up
 
-1. **blocky** — Tailscale admin → DNS: global nameserver from `just dns-info`, `9.9.9.9` as a
-   second resolver, *Override local DNS* on.
-2. **ntfy** — `ntfy user add --role=admin sai`, `ntfy token add sai` → `~/.config/ntfy/token`,
-   then subscribe to the `alerts` topic in the iOS app pointed at the `:8443` URL.
-3. **paperless** — `paperless-manage createsuperuser`, then an API token in the web UI for the
-   iOS app.
-4. **couchdb** — set the admin password in the seeded ini, create the LiveSync database, generate
-   the Setup URI in the plugin here and paste it on the other devices. Remove the `obsidian-git`
-   *plugin* everywhere: `vault-git.timer` is the only writer of git history now.
-5. **gcalcli** — OAuth *desktop app* client in Google Cloud Console, Calendar API enabled, client
-   JSON in `~/.config/gcalcli/`, then `gcalcli init` once.
-6. **openclaw** — `openclawctl models auth login --provider anthropic --method cli`, then
-   `openclawctl channels login --channel whatsapp` and scan the QR. Add the sending number to
-   `channels.whatsapp.allowFrom` in `/var/lib/openclaw/openclaw.json`. Use `openclawctl`, not
-   `openclaw`: the daemon's state lives under its own user.
+One-time steps, none of them expressible in Nix — they involve a browser, a phone, or a secret
+that must not land in the store. `$FQDN` below is this host's tailnet name; `just dns-info` prints
+it alongside the address blocky answers on.
+
+**Prerequisite for every iOS step:** the Tailscale app installed, logged into the same tailnet,
+and *connected*. Nothing here is exposed to the public internet, so an iPhone off the tailnet
+reaches none of it — including over cellular, where Tailscale is exactly what makes it work.
+
+### 0. blocky — tailnet-wide DNS
+
+Nothing to do on maui; it is already answering. In the Tailscale admin console → **DNS**:
+
+- **Nameservers** → add the address from `just dns-info`
+- add `9.9.9.9` as a second nameserver — if maui reboots, this is what stops DNS going down for
+  every device on the tailnet
+- turn **Override local DNS** on
+
+Verify from the iPhone on cellular, not just wifi: ads should be gone in Safari.
+
+### 1. ntfy — notifications
+
+On maui:
+
+```bash
+ntfy-admin user add --role=admin sai     # prompts for a password; remember it, iOS needs it
+ntfy-admin token add sai                 # prints tk_...
+install -m 600 /dev/null ~/.config/ntfy/token
+printf 'tk_...\n' > ~/.config/ntfy/token
+notify "hello from maui"                 # should arrive on the phone once the app is set up
+```
+
+An admin user has access to every topic, so no `ntfy-admin access` grant is needed. Use
+`ntfy-admin`, not `ntfy`: the server-side subcommands look for `/etc/ntfy/server.yml`, which does
+not exist here.
+
+On iOS — the **ntfy** app:
+
+1. Settings → **Default server** → `https://$FQDN:8443`
+2. Settings → **Manage users** → add `sai` with the password above
+3. Subscribe to the topic **`alerts`**
+
+Every timer on maui reports failures through this, and the 07:00 digest arrives on it.
+
+### 2. vaultwarden — passwords
+
+Already configured on maui; nothing to run. On iOS — the **Bitwarden** app:
+
+1. On the login screen, tap the region selector → **Self-hosted**
+2. **Server URL** → `https://$FQDN:8222`
+3. Create the account, then turn signups off in `~/.config/vaultwarden/env`
+   (`SIGNUPS_ALLOWED=false`) and `systemctl --user restart vaultwarden`
+
+The cert is a real Let's Encrypt one issued to the tailnet name, so the app accepts it without
+any profile fiddling.
+
+### 3. paperless — documents
+
+On maui:
+
+```bash
+paperless-manage createsuperuser
+```
+
+Then open `https://$FQDN:8444`, log in, and drop a PDF into `/srv/storage/paperless/consume/` —
+it should appear in the UI within a minute.
+
+On iOS — **Swift Paperless**:
+
+1. Add server `https://$FQDN:8444`
+2. Log in with the superuser; the app exchanges that for an API token itself
+
+Scope reminder: paperless is for admin documents — bills, letters, statements. Study capture stays
+in the vault's `_inbox/`. A file lives in exactly one of the two.
+
+### 4. couchdb + LiveSync — the Obsidian vault
+
+On maui, create the database the plugin replicates into:
+
+```bash
+PW=$(cat ~/.config/couchdb/admin-password)
+curl -X PUT -u "sai:$PW" http://127.0.0.1:5984/obsidian
+```
+
+Then in Obsidian **on maui**, install the **Self-hosted LiveSync** community plugin and point it at:
+
+| field | value |
+| --- | --- |
+| URI | `https://$FQDN:8446` |
+| Username | `sai` |
+| Password | contents of `~/.config/couchdb/admin-password` |
+| Database | `obsidian` |
+
+Set the ignore list to derived state only — `.git/`, `.index/notes.db*`, `.uv-cache/`,
+`.npm-tools/`, `.trash/`, `Plan/.mdbase/`, `__pycache__/`, `.obsidian/workspace*.json`,
+`.obsidian/cache`. Do **not** reuse the vault's `.gitignore`: it excludes `_inbox/*`, which is
+precisely the iPad capture live sync exists to move.
+
+Then **Copy setup URI** from the plugin, and on each other device (iPhone, iPad, mahi) install the
+same plugin and **Open setup URI**.
+
+Finally, remove the **obsidian-git** plugin from every device. `vault-git.timer` on maui is the
+only writer of git history now — that split is what prevents the stale-phone-reverts-desktop
+failure the vault's `.gitignore` documents.
+
+### 5. gcalcli — the morning digest's calendar half
+
+In the Google Cloud Console: create a project, enable the **Google Calendar API**, then create an
+OAuth client of type **Desktop app**. Keep the client ID and secret to hand. On maui:
+
+```bash
+gcalcli init      # paste the client ID and secret; a browser opens for consent
+morning-digest    # the calendar sections should now fill in
+```
+
+maui has a desktop session, so the browser flow works locally. Until this is done the digest still
+arrives — the calendar sections just say so in one line.
+
+### 6. openclaw — the WhatsApp agent
+
+Give it a model first. An API key is the most predictable option for an always-on daemon:
+
+```bash
+sudo sh -c 'printf "ANTHROPIC_API_KEY=sk-ant-...\n" >> /var/lib/openclaw/.env'
+sudo systemctl restart openclaw
+openclawctl models status
+```
+
+Or reuse a Claude Code login — note this logs *the openclaw user* in, not you:
+
+```bash
+openclaw-as claude auth login
+openclawctl models auth login --provider anthropic --method cli --set-default
+```
+
+Then link WhatsApp. Use a spare number if you have one; this is an unofficial WhatsApp Web client
+holding a real session:
+
+```bash
+openclawctl channels login --channel whatsapp     # prints a QR in the terminal
+```
+
+On iOS — **WhatsApp** → Settings → **Linked Devices** → **Link a Device** → scan that QR.
+
+Finally allow your own number to talk to it. It starts with an empty allowlist, so until this is
+done nobody can reach the agent at all:
+
+```bash
+sudo nano /var/lib/openclaw/openclaw.json     # channels.whatsapp.allowFrom: ["+44..."]
+sudo systemctl restart openclaw
+```
+
+Message that number from your phone to test. The Control UI is at `https://$FQDN:8447`; the token
+it asks for is in `/var/lib/openclaw/.env`.
+
+Two boundaries worth remembering, both deliberate: the agent can read, edit and commit in
+`/srv/storage/repos` but cannot push (the key is in your home directory, which `ProtectHome` hides
+from it), and ntfy stays the alerting path precisely because it has no model in the loop.
 
 **Clone path:** `~/.config/nix-config` is recommended over `~/.config/nix`, because
 `$XDG_CONFIG_HOME/nix/` is where Nix itself looks for `nix.conf`. Either works — `cdconf`/`rebuild`
 probe for `~/.config/nix-darwin-config`, `~/.config/nix-config` and `~/.config/nix` in that order.
+
+### Sandboxed Claude Code
+
+`claudebox` is a drop-in for `claude` (same flags) that runs it as a transient
+`systemd --user` service with the filesystem read-only and privilege escalation disabled:
+
+```bash
+cd /srv/storage/repos/foo && claudebox      # interactive
+claudebox -p "..."                           # headless works too
+CLAUDEBOX_RW=/srv/data:/opt/x claudebox # extra writable dirs, this run only
+```
+
+Inside it:
+
+- **Writable:** the launch directory, `~/.config/nix`, `/srv/storage/repos`, `~/.claude`, and a
+  private `/tmp` that's discarded on exit. Everything else is read-only. Launching from `~`, `/`
+  or `/srv/storage` does *not* make that directory writable (too broad), so `cd` into a project first.
+- **No root:** `sudo`/`su`/`pkexec` fail even with the right password — run those yourself in a
+  normal shell.
+- **Blocked:** mount, ptrace, bpf, kernel modules, new namespaces. Claude's own `/sandbox` needs
+  namespaces, so it doesn't work inside; this sandbox replaces it.
+- **Open:** network, your environment and SSH agent (so `git push` works), and `nix` via the daemon.
+  `just switch` won't work inside — it writes outside the allowlist.
+
+Claude's global state moves from `~/.claude.json` to `~/.claude/.claude.json` (`CLAUDE_CONFIG_DIR`),
+since `$HOME` is read-only in the sandbox. The first `claudebox` run copies it over, and from then
+on `~/.zshenv` points plain `claude` (in new shells) at the same file, so both share trust settings,
+MCP servers and login.
 
 ## noble2 (VPS, root)
 
