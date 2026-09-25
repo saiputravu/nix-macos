@@ -109,6 +109,17 @@ check:
     @nix eval --raw '{{ flake }}#homeConfigurations."root@noble2".activationPackage.drvPath'
     @echo
 
+# Print the address to paste into Tailscale admin -> DNS as the global nameserver.
+[group('check')]
+dns-info:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    eval "$(tailnet-vars)"
+    echo "global nameserver : $TS_IP    (blocky, this host)"
+    echo "fallback resolver : 9.9.9.9   (so a reboot here does not take the tailnet's DNS down)"
+    echo
+    echo "Tailscale admin -> DNS: set both, and turn 'Override local DNS' on."
+
 # List generations for this host.
 [group('check')]
 generations:

@@ -10,7 +10,9 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  tailnet = import ./lib/tailnet.nix {inherit pkgs;};
+in {
   home.activation.hostTlsCert = lib.hm.dag.entryAfter ["writeBoundary"] ''
     export PATH="/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
 
@@ -22,13 +24,11 @@
     fi
 
     if [ ! -e "$CERT_DIR/cert.pem" ] || [ ! -e "$CERT_DIR/key.pem" ]; then
-      TS_IP="$(${pkgs.tailscale}/bin/tailscale ip -4 2>/dev/null || echo 127.0.0.1)"
-      TS_SUFFIX="$(${pkgs.tailscale}/bin/tailscale status --json 2>/dev/null | sed -n 's/.*"MagicDNSSuffix": *"\([^"]*\)".*/\1/p' | head -1)"
-      TS_FQDN="$(hostname -s)''${TS_SUFFIX:+.$TS_SUFFIX}"
+      ${tailnet.vars}
       $DRY_RUN_CMD ${pkgs.openssl}/bin/openssl req -x509 -nodes -newkey rsa:2048 \
         -keyout "$CERT_DIR/key.pem" -out "$CERT_DIR/cert.pem" -days 3650 \
         -subj "/CN=$TS_FQDN" \
-        -addext "subjectAltName=DNS:$TS_FQDN,DNS:$(hostname -s),DNS:localhost,IP:127.0.0.1,IP:$TS_IP"
+        -addext "subjectAltName=DNS:$TS_FQDN,DNS:''${TS_FQDN%%.*},DNS:localhost,IP:127.0.0.1,IP:$TS_IP"
       $DRY_RUN_CMD chmod 600 "$CERT_DIR/key.pem"
     fi
   '';

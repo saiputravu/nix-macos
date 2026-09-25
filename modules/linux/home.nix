@@ -34,6 +34,7 @@
       # Shared baseline (helix, zellij, delta) comes from ../common/home.nix.
       ripgrep
       gh
+      mosh
 
       # ai
       inputs.claude-code-nix.packages.${pkgs.system}.default

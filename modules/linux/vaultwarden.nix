@@ -33,7 +33,9 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  tailnet = import ./lib/tailnet.nix {inherit pkgs;};
+in {
   home.packages = [pkgs.vaultwarden];
 
   home.activation.vaultwardenEnv = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -60,9 +62,10 @@ SIGNUPS_ALLOWED=true
 # Generate with: openssl rand -base64 48
 #ADMIN_TOKEN=
 
-# Uncomment if reachable from more than localhost (e.g. via Tailscale, a
-# reverse proxy, or LAN) so links/emails point at the right address.
-#DOMAIN=http://127.0.0.1:8222
+# The origin used for invite/reset links and as the WebAuthn relying-party ID,
+# so it must be the address you actually browse to -- passkeys registered
+# against the wrong origin will not verify. Tailnet name, not 127.0.0.1.
+#DOMAIN=https://<this host>.<tailnet>.ts.net:8222
 EOF"
       $DRY_RUN_CMD chmod 600 "$ENV_FILE"
     fi
@@ -83,7 +86,8 @@ EOF"
       ExecStart = let
         start = pkgs.writeShellScript "vaultwarden-start" ''
           set -eu
-          export ROCKET_ADDRESS="$(${pkgs.tailscale}/bin/tailscale ip -4)"
+          ${tailnet.vars}
+          export ROCKET_ADDRESS="$TS_IP"
           exec ${pkgs.vaultwarden}/bin/vaultwarden
         '';
       in "${start}";

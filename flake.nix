@@ -40,10 +40,12 @@
         username = "sai";
         homedir = "/home/sai";
       };
+      # VPS, root-managed standalone home-manager -- `just check` and the README
+      # bootstrap both target root@noble2, so the output name must match.
       noble2 = {
         system = "x86_64-linux";
-        username = "sai";
-        homedir = "/home/sai";
+        username = "root";
+        homedir = "/root";
       };
     };
   in
@@ -104,7 +106,15 @@
       # No useGlobalPkgs here, so allowUnfree has to be set on this pkgs instance.
       pkgs = import nixpkgs {
         inherit (hosts.maui) system;
-        config.allowUnfree = true;
+        config = {
+          allowUnfree = true;
+          # openclaw is marked insecure in nixpkgs: it feeds untrusted chat into
+          # an LLM that has system access by default. modules/linux/openclaw.nix
+          # is what contains that blast radius -- dedicated user, ProtectHome,
+          # no sudo. Matched by name rather than the pinned `openclaw-<version>`
+          # string so `just update` cannot break eval.
+          allowInsecurePredicate = pkg: nixpkgs.lib.getName pkg == "openclaw";
+        };
       };
       extraSpecialArgs = {
         inherit inputs;
@@ -113,7 +123,7 @@
       modules = [
         ./modules/common/home.nix
         ./modules/linux/home.nix
-        ./modules/linux/vaultwarden.nix
+        ./modules/linux/services-maui.nix
       ];
     };
 
