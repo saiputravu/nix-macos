@@ -43,6 +43,13 @@
     ; LiveSync chunks large notes, but attachments still need headroom.
     max_document_size = 50000000
 
+    ; One node, so one replica and one shard. Without this the packaged
+    ; default (n = 3) is used and every database creation logs
+    ; "Request to create N=3 DB but only 1 node(s)" before falling back.
+    [cluster]
+    n = 1
+    q = 1
+
     [chttpd]
     port = ${toString port}
     bind_address = 127.0.0.1
@@ -123,7 +130,13 @@ in {
       ExecStart = "${pkg}/bin/couchdb";
       Environment = [
         # Layered lowest-precedence first; the writable file wins.
-        "ERL_FLAGS=-couch_ini ${pkg}/etc/default.ini ${nixIni} ${localIni}"
+        #
+        # The quotes are load-bearing. systemd splits an unquoted Environment=
+        # line at whitespace and reads each piece as its own assignment, so
+        # without them ERL_FLAGS is just "-couch_ini" and the three ini paths
+        # are silently dropped -- CouchDB then starts with no config at all and
+        # aborts with "No Admin Account Found", which points nowhere near here.
+        ''"ERL_FLAGS=-couch_ini ${pkg}/etc/default.ini ${nixIni} ${localIni}"''
         "COUCHDB_ARGS_FILE=${pkg}/etc/vm.args"
         "HOME=${dbDir}"
       ];

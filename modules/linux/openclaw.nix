@@ -98,6 +98,11 @@
     // will not be reverted, and nix will not rewrite it.
     {
       gateway: {
+        // Required. Without it the gateway refuses to start -- it treats a
+        // config that exists but has no mode as damage rather than guessing
+        // local -- and it exits 0 doing so, which looks like a clean shutdown
+        // in systemd and is why the unit below has a start limit.
+        mode: "local",
         port: ${toString port},
         // tailscale serve is the only thing in front of this.
         bind: "loopback",
@@ -212,6 +217,12 @@ in {
         Wants=network-online.target
         After=network-online.target
         After=tailscaled.service
+        # A gateway that rejects its config exits 0, so Restart=always will
+        # respin it forever and systemd will report it as healthy-ish while it
+        # does. Give up after five tries in a minute and sit in `failed`, which
+        # is at least honest about what happened.
+        StartLimitIntervalSec=60
+        StartLimitBurst=5
 
         [Service]
         Type=simple
